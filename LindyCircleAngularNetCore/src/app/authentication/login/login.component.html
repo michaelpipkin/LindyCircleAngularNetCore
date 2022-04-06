@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-5">
+        <h3>User Login</h3>
+
+        <form [formGroup]="loginForm" (ngSubmit)="loginUser()">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="userName" placeholder="Username" formControlName="userName" />
+                <label for="userName">Username</label>
+            </div>
+            <div class="validator-bottom" *ngIf="validateControl('userName') && controlHasError('userName', 'required')">
+                <em>Username is required</em>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password" />
+                <label for="password">Password</label>
+            </div>
+            <div class="validator-bottom" *ngIf="validateControl('password') && controlHasError('password', 'required')">
+                <em>Password is required</em>
+            </div>
+            <div class="row form-group-row">
+                <div class="col-md-9">
+                    <a [routerLink]="['/authentication/forgotpassword']">Forgot Password</a>
+                </div>
+                <div class="col-md-3 text-end">
+                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

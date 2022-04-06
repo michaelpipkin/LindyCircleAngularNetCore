@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-5">
+        <h3>User Profile</h3>
+
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+            <span [innerHTML]="errorMessage"></span>
+        </div>
+        <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+            Your password has been updated.
+        </div>
+        <form [formGroup]="changeForm" (ngSubmit)="changePassword()">
+            <div class="mb-3 ms-2">
+                <span>Username: {{userName}}</span>
+            </div>
+            <div class="mb-3 ms-2">
+                <span>Email: {{email}}</span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="currentPassword" placeholder="Current Password" formControlName="currentPassword" />
+                <label for="currentPassword">Current Password</label>
+            </div>
+            <div class="validator-bottom" *ngIf="validateControl('currentPassword') && controlHasError('currentPassword', 'required')">
+                <em>Current Password is required</em>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="newPassword" placeholder="New Password" formControlName="newPassword" />
+                <label for="newPassword">New Password</label>
+            </div>
+            <div class="validator-bottom" *ngIf="validateControl('newPassword') && controlHasError('newPassword', 'required')">
+                <em>New Password is required</em>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" formControlName="confirmPassword" />
+                <label for="confirmPassword">Confirm Password</label>
+            </div>
+            <div class="validator-bottom" *ngIf="validateControl('confirmPassword') && controlHasError('confirmPassword', 'required')">
+                <em>Confirm password is required</em>
+            </div>
+            <div class="validator-bottom" *ngIf="!controlHasError('confirmPassword', 'required') && formHasError('noMatch')">
+                <em>Passwords must match</em>
+            </div>
+            <div class="form-group-row">
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary" [disabled]="!changeForm.valid">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
