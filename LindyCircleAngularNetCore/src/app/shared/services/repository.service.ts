@@ -73,7 +73,24 @@ export class RepositoryService {
             miscRevenue: practice.miscRevenue
         };
         return this.http.post<Practice>(environment.API_URL + 'Practices', val);
-    }
+	}
+
+	public updatePractice(practice: Practice): Observable<Practice> {
+		var val = {
+			practiceId: practice.pracitceId,
+			practiceNumber: practice.practiceNumber,
+			practiceDate: practice.practiceDate,
+			practiceTopic: practice.practiceTopic,
+			practiceCost: practice.practiceCost,
+			miscExpense: practice.miscExpense,
+			miscRevenue: practice.miscRevenue
+		};
+		return this.http.put<Practice>(environment.API_URL + 'Practices/' + practice.pracitceId, val);
+	}
+
+	public deletePractice(practiceId: number): Observable<any> {
+		return this.http.delete(environment.API_URL + 'Practices/' + practiceId);
+	}
 //#endregion
 
 //#region Punch card functions
@@ -90,5 +107,11 @@ export class RepositoryService {
     public getAttendanceForPractice(practiceId: number): Observable<Attendance[]> {
         return this.http.get<Attendance[]>(environment.API_URL + 'Practices/' + practiceId + '/Attendance');
     }
+//#endregion
+
+//#region Default functions
+	public getDefaultValue(defaultName: string): Observable<number> {
+		return this.http.get<number>(environment.API_URL + 'Defaults/value/' + defaultName);
+	}
 //#endregion
 }

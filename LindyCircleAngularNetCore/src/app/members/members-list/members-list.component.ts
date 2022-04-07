@@ -44,7 +44,7 @@ export class MembersListComponent implements OnInit {
 	firstNameSort: boolean = true;
 	lastNameSort: boolean = true;
 	totalPaidSort: boolean = true;
-	totalAttendanceSort: boolean = true;
+	attendanceSort: boolean = true;
 
 	deleteId: number = 0;
 
@@ -60,6 +60,28 @@ export class MembersListComponent implements OnInit {
 		});
 	}
 
+	filterMembers() {
+		var firstNameFilter = this.firstNameFilter;
+		var lastNameFilter = this.lastNameFilter;
+		var activeFilter = this.activeFilter;
+
+		this.members = this.membersWithoutFilter.filter(
+			function (member: Member) {
+				return member.firstName.toString().toLowerCase().includes(
+					firstNameFilter.toString().trim().toLowerCase()) &&
+					member.lastName.toString().toLowerCase().includes(
+						lastNameFilter.toString().trim().toLowerCase()) &&
+					(member.inactive == false || member.inactive != activeFilter);
+			}
+		);
+	}
+
+	sortResult(col: string, sort: string) {
+		var asc = Reflect.get(this, sort);
+		Reflect.set(this, sort, !asc);
+		this.members = this.sorter.sort(this.members, col, asc);
+	}
+
 	addClick(memberModal: TemplateRef<any>) {
 		this.memberForm.setValue({
 			'memberId': 0,
@@ -72,13 +94,13 @@ export class MembersListComponent implements OnInit {
 	}
 
 	editClick(member: Member, memberModal: TemplateRef<any>) {
-		this.modalTitle = "Edit Member";
 		this.memberForm.setValue({
 			'memberId': member.memberId,
 			'firstName': member.firstName,
 			'lastName': member.lastName,
 			'inactive': member.inactive
 		});
+		this.modalTitle = "Edit Member";
 		this.modalRef = this.modalService.show(memberModal);
 	}
 
@@ -125,7 +147,7 @@ export class MembersListComponent implements OnInit {
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);
 		this.modalRef.content.event.subscribe((res: any) => {
 			if (res) this.deleteMember();
-		})
+		});
 	}
 
 	deleteMember() {
@@ -135,26 +157,6 @@ export class MembersListComponent implements OnInit {
 				this.getMembers();
 			}
 		);
-	}
-
-	filterMembers() {
-		var firstNameFilter = this.firstNameFilter;
-		var lastNameFilter = this.lastNameFilter;
-		var activeFilter = this.activeFilter;
-
-		this.members = this.membersWithoutFilter.filter(
-			function (member: Member) {
-				return member.firstName.toString().toLowerCase().includes(
-					firstNameFilter.toString().trim().toLowerCase()) &&
-					member.lastName.toString().toLowerCase().includes(
-						lastNameFilter.toString().trim().toLowerCase()) &&
-					(member.inactive == false || member.inactive != activeFilter);
-			}
-		);
-	}
-
-	sortResult(col: string, sort: string) {
-		this.members = this.sorter.sort(this.members, col, sort);
 	}
 
 	showOkModal(title: string, body: string = "") {

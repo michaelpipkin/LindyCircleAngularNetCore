@@ -45,7 +45,7 @@
                             <a (click)="sortResult('totalPaid', 'totalPaidSort');">Total Paid <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                         <th class="text-end">
-                            <a (click)="sortResult('totalAttendance', 'totalAttendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
+                            <a (click)="sortResult('totalAttendance', 'attendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                     </tr>
                 </thead>
@@ -115,7 +115,6 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary" [disabled]="!memberForm.valid">Save</button>
-            <!--<button type="submit" class="btn btn-primary">Save</button>-->
         </div>
     </form>
 </ng-template>

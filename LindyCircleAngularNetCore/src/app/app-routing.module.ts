@@ -11,11 +11,13 @@ import { UserProfileComponent } from 'app/authentication/user-profile/user-profi
 import { HomeComponent } from 'app/home/home.component';
 import { MemberDetailsComponent } from 'app/members/member-details/member-details.component';
 import { MembersListComponent } from 'app/members/members-list/members-list.component';
+import { PracticesListComponent } from 'app/practices/practices-list/practices-list.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'members', component: MembersListComponent, canActivate: [AuthGuard] },
-    { path: 'members/:memberId', component: MemberDetailsComponent, canActivate: [AuthGuard, AdminGuard] },
+	{ path: 'members/:memberId', component: MemberDetailsComponent, canActivate: [AuthGuard, AdminGuard] },
+	{ path: 'practices', component: PracticesListComponent, canActivate: [AuthGuard] },
     { path: 'register', component: RegisterUserComponent },
     { path: 'emailconfirmation', component: EmailConfirmationComponent },
     { path: 'login', component: LoginComponent },
@@ -26,7 +28,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+	imports: [RouterModule.forRoot(routes, {useHash: true})],
     exports: [RouterModule]
 })
 

@@ -35,6 +35,18 @@ namespace LindyCircleWebApi.Controllers
             return @default;
         }
 
+        // GET: api/Defaults/value/Rental%20cost
+        [HttpGet("value/{defaultName}")]
+        public async Task<ActionResult<decimal>> GetDefault(string defaultName) {
+            var @default = await _context.Defaults.SingleOrDefaultAsync(s => s.DefaultName.Equals(defaultName));
+
+            if (@default == null) {
+                return NotFound();
+            }
+
+            return @default.DefaultValue;
+        }
+
         // PUT: api/Defaults/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
