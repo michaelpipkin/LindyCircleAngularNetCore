@@ -1,7 +1,7 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
 import { ErrorNotificationComponent } from '@app-shared/error-notification/error-notification.component';
@@ -11,15 +11,18 @@ import { YesnoDialogComponent } from '@app-shared/yesno-dialog/yesno-dialog.comp
 import { JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
+import { FooterComponent } from 'app/core/components/footer/footer.component';
 import { NavbarComponent } from 'app/core/components/navbar/navbar.component';
 import { HomeComponent } from 'app/home/home.component';
 import { MemberDetailsComponent } from 'app/members/member-details/member-details.component';
 import { MembersListComponent } from 'app/members/members-list/members-list.component';
+import { PracticeDetailsComponent } from 'app/practices/practice-details/practice-details.component';
 import { PracticesListComponent } from 'app/practices/practices-list/practices-list.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule, MODAL_CONFIG_DEFAULT_OVERRIDE } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+import { LoadingComponent } from './shared/loading/loading.component';
 
 @NgModule({
 	declarations: [
@@ -32,7 +35,10 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 		MemberDetailsComponent,
 		OkDialogComponent,
 		ErrorNotificationComponent,
-		PracticesListComponent
+		PracticesListComponent,
+		PracticeDetailsComponent,
+		FooterComponent,
+  LoadingComponent
 	],
 	imports: [
 		BrowserModule,
@@ -56,11 +62,13 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 		})
 	],
 	providers: [
-		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered' } },
+		Title,
+		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered', backdrop: 'static', keyboard: false } },
 		{ provide: TooltipConfig, useValue: { container: 'body', placement: 'top', adaptivePosition: false } },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerService, multi: true }
 	],
 	bootstrap: [AppComponent]
 })
+
 
 export class AppModule { }

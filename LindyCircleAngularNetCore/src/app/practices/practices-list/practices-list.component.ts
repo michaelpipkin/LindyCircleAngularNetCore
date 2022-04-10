@@ -1,13 +1,14 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
-import { Practice } from 'app/practices/models/practice.model';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { DateFormatService } from '@app-shared/services/date-format.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { TableSortService } from '@app-shared/services/table-sort.service';
+import { Practice } from 'app/practices/models/practice.model';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Component({
 	selector: 'app-practices-list',
@@ -45,6 +46,8 @@ export class PracticesListComponent implements OnInit {
 	});
 
 	practiceTopicFilter: string = "";
+	startDateFilter: Date | undefined;
+	endDateFilter: Date | undefined;
 
 	numberSort: boolean = true;
 	dateSort: boolean = true;
@@ -59,10 +62,12 @@ export class PracticesListComponent implements OnInit {
 	}
 
 	getPractices() {
+		this.modalRef = this.modalService.show(LoadingComponent);
 		this.repository.getPractices().subscribe(data => {
 			this.practices = data;
 			this.practicesWithoutFilter = data;
 			this.filterPractices;
+			this.modalRef!.hide();
 		})
 	}
 
@@ -84,10 +89,17 @@ export class PracticesListComponent implements OnInit {
 
 	filterPractices() {
 		var topicFilter = this.practiceTopicFilter;
+		var startDateFilter = this.startDateFilter;
+		var endDateFilter = this.endDateFilter;
+
 		this.practices = this.practicesWithoutFilter.filter(
 			function (practice: Practice) {
 				return practice.practiceTopic.toString().toLowerCase().includes(
-					topicFilter.toString().trim().toLowerCase())
+					topicFilter.toString().trim().toLowerCase()) &&
+					(startDateFilter != undefined && startDateFilter.toString() != '' ?
+						practice.practiceDate >= startDateFilter : true) &&
+					(endDateFilter != undefined && endDateFilter.toString() != '' ?
+						practice.practiceDate <= endDateFilter : true)
 			}
 		);
 	}
@@ -114,7 +126,7 @@ export class PracticesListComponent implements OnInit {
 
 	editClick(practice: Practice, practiceModal: TemplateRef<any>) {
 		this.practiceForm.setValue({
-			'practiceId': practice.pracitceId,
+			'practiceId': practice.practiceId,
 			'practiceNumber': practice.practiceNumber,
 			'practiceDate': practice.practiceDateString,
 			'practiceTopic': practice.practiceTopic,
@@ -159,7 +171,7 @@ export class PracticesListComponent implements OnInit {
 	}
 
 	confirmDelete(practice: Practice) {
-		this.deleteId = practice.pracitceId;
+		this.deleteId = practice.practiceId;
 		const initialState: ModalOptions = {
 			initialState: {
 				modalTitle: "WARNING! This action cannot be undone.",

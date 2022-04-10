@@ -1,0 +1,79 @@
+<main class="row justify-content-center">
+	<form class="infoForm">
+		<div class="row">
+			<label class="col-2 col-form-label">Practice number</label>
+			<label class="col col-form-label">{{practice?.practiceNumber}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Date</label>
+			<label class="col col-form-label">{{practice?.practiceDate | date: 'yyyy-LL-dd'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Topic</label>
+			<label class="col col-form-label">{{practice?.practiceTopic}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Rental cost</label>
+			<label class="col col-form-label">{{practice?.practiceCost | number: '1.2-2'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Misc expense</label>
+			<label class="col col-form-label">{{practice?.miscExpense | number: '1.2-2'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Attendance revenue</label>
+			<label class="col col-form-label">{{practice?.attendanceRevenue | number: '1.2-2'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Punch cards sold</label>
+			<label class="col col-form-label">{{practice?.punchCardsSold | number: '1.0-0'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Punch card revenue</label>
+			<label class="col col-form-label">{{practice?.punchCardRevenue | number: '1.2-2'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Misc revenue</label>
+			<label class="col col-form-label">{{practice?.miscRevenue | number: '1.2-2'}}</label>
+		</div>
+		<div class="row">
+			<label class="col-2 col-form-label">Practice total</label>
+			<label class="col col-form-label">{{practice?.practiceTotal | number: '1.2-2'}}</label>
+		</div>
+	</form>
+	<div class="row ps-1 mt-3">
+		<div class="col-3 ps-0" style="min-width: 400px;">
+			<div class="table-fix-head" style="width: 380px;">
+				<table class="table table-striped table-hover text-nowrap row-sm">
+					<caption>Attendees</caption>
+					<thead>
+						<tr>
+							<th>
+								Name
+							</th>
+							<th>
+								Type
+							</th>
+							<th class="text-end">
+								Amount
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let attendance of attendances">
+							<td>{{attendance.memberName}}</td>
+							<td>{{attendance.paymentTypeText}}</td>
+							<td class="text-end">{{attendance.paymentAmount | number: '1.2-2'}}</td>
+						</tr>
+					</tbody>
+					<tfoot *ngIf="attendances.length>0">
+						<tr>
+							<td>Attended: {{attendances.length}}</td>
+							<td colspan="2" class="text-end">Collected: {{totalAttendanceAmount | number: '1.2-2'}}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</main>

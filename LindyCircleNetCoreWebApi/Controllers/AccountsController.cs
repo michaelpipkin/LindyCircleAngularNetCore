@@ -43,7 +43,7 @@ namespace LindyCircleWebApi.Controllers
             var result = await _userManager.CreateAsync(user, userRegistration.Password);
             if (result.Succeeded) {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var param = new Dictionary<string, string>
+                var param = new Dictionary<string, string?>
                 {
                     {"token", token},
                     { "userName", user.UserName }
@@ -88,7 +88,7 @@ namespace LindyCircleWebApi.Controllers
                 return BadRequest(new AuthResponseDto { Title = "Unable to authenticate login credentials", Detail = "Invalid username/password combination" });
             if (!await _userManager.IsEmailConfirmedAsync(user)) {
                 var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var param = new Dictionary<string, string>
+                var param = new Dictionary<string, string?>
                 {
                     {"token", confirmationToken},
                     { "userName", user.UserName }
@@ -124,7 +124,7 @@ namespace LindyCircleWebApi.Controllers
             if (user == null) return BadRequest("Invalid request");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var param = new Dictionary<string, string>
+            var param = new Dictionary<string, string?>
             {
                 {"token", token},
                 {"userName", forgotPasswordDto.UserName }

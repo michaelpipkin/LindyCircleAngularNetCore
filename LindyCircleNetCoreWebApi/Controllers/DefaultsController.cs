@@ -19,9 +19,7 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/Defaults
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Default>>> GetDefaults() {
-            return await _context.Defaults.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Default>>> GetDefaults() => await _context.Defaults.ToListAsync();
 
         // GET: api/Defaults/5
         [HttpGet("{id}")]
@@ -96,8 +94,6 @@ namespace LindyCircleWebApi.Controllers
         //    return NoContent();
         //}
 
-        private bool DefaultExists(int id) {
-            return _context.Defaults.Any(e => e.DefaultId == id);
-        }
+        private bool DefaultExists(int id) => _context.Defaults.Any(e => e.DefaultId == id);
     }
 }

@@ -1,97 +1,109 @@
 /* You can add global styles to this file, and also import other style files */
 
 a, a:hover {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 th {
-    padding-left: 8px !important;
-    padding-right: 2px !important;
+	padding-left: 8px !important;
+	padding-right: 2px !important;
 }
 
 table {
-    caption-side: top;
-    border-collapse: separate;
+	caption-side: top;
+	border-collapse: separate;
 }
 
 caption {
-    background: rgba(255, 255, 255, 1);
-    padding: 0 0 0 8px;
+	background: rgba(255, 255, 255, 1);
+	padding: 0 0 0 8px;
 }
 
 tfoot {
-    background: #ddd;
-    font-weight: bold;
+	background: #ddd;
+	font-weight: bold;
 }
 
 em {
-    color: #e71515;
-    font-weight: bold;
+	color: #e71515;
+	font-weight: bold;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
 .actionsColumn i, .actionsColumn a i {
-    margin-left: 12px;
+	margin-left: 12px;
 }
 
 .form-control {
-    margin-left: 0px !important;
+	margin-left: 0px !important;
 }
 
 .infoForm div label {
-    padding-top: 2px;
-    padding-bottom: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 
 .table-clear-float {
-    clear: both;
+	clear: both;
 }
 
 .table-fix-head {
-    overflow-y: auto;
-    height: 800px;
+	overflow-y: auto;
+	height: 800px;
 }
 
-    .table-fix-head thead th {
-        position: sticky;
-        top: 0;
-        background: rgba(255, 255, 255, 1);
-    }
+	.table-fix-head thead th {
+		position: sticky;
+		top: 0;
+		background: rgb(221, 221, 221, 1);
+	}
 
 .fade-icon {
-    color: #ccc;
+	color: #ccc;
 }
 
 .actionsColumn {
-    width: 92px;
-    padding-left: 0px;
-    padding-right: 0px;
+	width: 92px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 .row-md tbody tr td, .row-md tfoot tr td {
-    padding-top: 4px;
-    padding-bottom: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
 
 .row-sm tbody tr td, .row-sm tfoot tr td {
-    padding-top: 2px;
-    padding-bottom: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 }
 
 .validator-bottom {
-    margin-top: -18px;
-    margin-bottom: 12px;
+	margin-top: -18px;
+	margin-bottom: 12px;
 }
 
 .ng-invalid.ng-touched {
-    border-color: red;
+	border-color: red;
 }
 
 .btn-link {
-    text-decoration: none;
+	text-decoration: none;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	white-space: nowrap;
+	line-height: 60px;
+}
+
+.header-search {
+	padding: 0.1rem 0.5rem;
 }

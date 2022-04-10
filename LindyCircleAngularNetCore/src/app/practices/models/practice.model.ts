@@ -1,5 +1,5 @@
 export interface Practice {
-    pracitceId: number;
+    practiceId: number;
     practiceNumber: number;
     practiceDate: Date;
     practiceDateString: string;

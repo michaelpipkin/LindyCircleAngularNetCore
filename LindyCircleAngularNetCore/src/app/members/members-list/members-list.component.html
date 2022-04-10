@@ -1,5 +1,5 @@
-<main class="row justify-content-md-center">
-    <div class="col col-auto">
+<main class="row justify-content-center">
+    <div class="col-auto">
         <button *ngIf="isUserAdmin" type="button" class="btn btn-dark m-2 float-end" (click)="addClick(memberModal)">Add New Member</button>
 
         <div class="table-fix-head table-clear-float">
@@ -7,7 +7,7 @@
                 <thead>
                     <tr>
                         <th style="width: 92px;">
-                            <div style="text-align: right; line-height: 36px; padding-bottom: 8px;">
+                            <div style="text-align: right; line-height: 20px; padding-bottom: 8px; padding-right: 4px;">
                                 Search
                             </div>
                             <div *ngIf="isUserAdmin" style="text-align: center;">
@@ -22,13 +22,13 @@
                         </th>
                         <th>
                             <div class="d-flex flex-row">
-                                <input class="form-control m-2" [(ngModel)]="firstNameFilter" (keyup)="filterMembers()" placeholder="First name" />
+                                <input class="form-control header-search mb-1" [(ngModel)]="firstNameFilter" (keyup)="filterMembers()" placeholder="First name" />
                             </div>
                             <a (click)="sortResult('firstName', 'firstNameSort');">First Name <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                         <th>
                             <div class="d-flex flex-row">
-                                <input class="form-control m-2" [(ngModel)]="lastNameFilter" (keyup)="filterMembers()" placeholder="Last name" />
+                                <input class="form-control header-search mb-1" [(ngModel)]="lastNameFilter" (keyup)="filterMembers()" placeholder="Last name" />
                             </div>
                             <a (click)="sortResult('lastName', 'lastNameSort');">Last Name <i class="bi bi-arrow-down-up"></i></a>
                         </th>

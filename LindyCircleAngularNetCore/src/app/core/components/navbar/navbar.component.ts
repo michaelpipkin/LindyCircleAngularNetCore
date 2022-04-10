@@ -7,6 +7,7 @@ import { AuthenticationService } from '@app-shared/services/authentication.servi
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
     isUserAuthenticated: boolean  = this.authService.isUserAuthenticated();
 

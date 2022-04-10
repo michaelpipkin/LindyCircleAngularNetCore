@@ -1,12 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
-import { Member } from 'app/members/models/member.model';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { TableSortService } from '@app-shared/services/table-sort.service';
+import { Member } from 'app/members/models/member.model';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Component({
 	selector: 'app-members-list',
@@ -53,10 +54,12 @@ export class MembersListComponent implements OnInit {
 	}
 
 	getMembers() {
+		this.modalRef = this.modalService.show(LoadingComponent);
 		this.repository.getMembers().subscribe(data => {
 			this.members = data;
 			this.membersWithoutFilter = data;
 			this.filterMembers();
+			this.modalRef!.hide();
 		});
 	}
 

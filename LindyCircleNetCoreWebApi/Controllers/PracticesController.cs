@@ -1,9 +1,6 @@
 ﻿using LindyCircleWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
@@ -18,9 +15,8 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/Practices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Practice>>> GetPractices() {
-            return await _context.Practices.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Practice>>> GetPractices() =>
+            (await _context.Practices.ToListAsync()).OrderBy(o => o.PracticeNumber).ToList();
 
         // GET: api/Practices/5
         [HttpGet("{id}")]
@@ -34,11 +30,23 @@ namespace LindyCircleWebApi.Controllers
             return practice;
         }
 
+        // GET: api/Practices/Number/5
+        [HttpGet("Number/{practiceNumber}")]
+        public async Task<ActionResult<Practice>> GetPracticeByNumber(int practiceNumber) {
+            var practice = await _context.Practices.SingleOrDefaultAsync(s => s.PracticeNumber == practiceNumber);
+
+            if (practice == null) {
+                return NotFound();
+            }
+
+            return practice;
+        }
+
         // GET: api/Practices/5/Attendance
         [HttpGet("{id}/Attendance")]
-        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendanceByPractice(int id) {
-            return await _context.Attendances.Where(w => w.PracticeId == id).ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendanceByPractice(int id) =>
+            (await _context.Attendances.Where(w => w.PracticeId == id).ToListAsync())
+            .OrderBy(o => o.MemberName).ToList();
 
         // GET: api/Practices/Next
         [HttpGet("Next")]
@@ -97,8 +105,6 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool PracticeExists(int id) {
-            return _context.Practices.Any(e => e.PracticeId == id);
-        }
+        private bool PracticeExists(int id) => _context.Practices.Any(e => e.PracticeId == id);
     }
 }

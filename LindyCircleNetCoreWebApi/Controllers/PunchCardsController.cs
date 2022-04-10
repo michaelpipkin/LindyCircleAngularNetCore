@@ -19,9 +19,8 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/PunchCards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCards() {
-            return await _context.PunchCards.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCards() =>
+            await _context.PunchCards.ToListAsync();
 
         // GET: api/PunchCards/5
         [HttpGet("{id}")]
@@ -85,8 +84,6 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool PunchCardExists(int id) {
-            return _context.PunchCards.Any(e => e.PunchCardId == id);
-        }
+        private bool PunchCardExists(int id) => _context.PunchCards.Any(e => e.PunchCardId == id);
     }
 }

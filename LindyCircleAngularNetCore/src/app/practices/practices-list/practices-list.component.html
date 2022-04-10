@@ -1,15 +1,24 @@
-<main class="row justify-content-md-center">
-	<div class="col col-auto">
-		<button *ngIf="isUserAdmin" type="button" class="btn btn-dark m-2 float-end" (click)="addClick(practiceModal)">Add New Practice</button>
+<main class="row justify-content-center">
+	<div class="col col-auto" style="min-width: 700px;">
+		<div class="row">
+			<div class="form-floating mb-3 col-3">
+				<input type="date" class="form-control" id="startDateFilter" [(ngModel)]="startDateFilter" (blur)="filterPractices()" />
+				<label for="startDateFilter" class="ms-2">Starting Date</label>
+			</div>
+			<div class="form-floating mb-3 col-3">
+				<input type="date" class="form-control" id="endDateFilter" [(ngModel)]="endDateFilter" (blur)="filterPractices()" />
+				<label for="endDateFilter" class="ms-2">Ending Date</label>
+			</div>
+			<div class="col-6">
+				<button *ngIf="isUserAdmin" type="button" class="btn btn-dark m-2 float-end" (click)="addClick(practiceModal)">Add New Practice</button>
+			</div>
+		</div>
 
 		<div class="table-fix-head table-clear-float">
 			<table class="table table-striped table-hover text-nowrap row-md">
 				<thead>
 					<tr>
 						<th style="width: 92px;">
-							<div style="text-align: right; line-height: 36px; padding-bottom: 8px;">
-								Search
-							</div>
 							<div *ngIf="isUserAdmin" style="text-align: center;">
 								Actions
 							</div>
@@ -24,20 +33,44 @@
 							<a (click)="sortResult('practiceNumber', 'numberSort');">Num <i class="bi bi-arrow-down-up"></i></a>
 						</th>
 						<th>
+							<div style="text-align: right; line-height: 20px; padding-bottom: 8px;">
+								Search
+							</div>
 							<a (click)="sortResult('practiceDate', 'dateSort');">Date <i class="bi bi-arrow-down-up"></i></a>
 						</th>
 						<th>
 							<div class="d-flex flex-row">
-								<input class="form-control m-2" [(ngModel)]="practiceTopicFilter" (keyup)="filterPractices()" placeholder="Topic" />
+								<input class="form-control header-search mb-1" [(ngModel)]="practiceTopicFilter" (keyup)="filterPractices()" placeholder="Topic" />
 							</div>
 							Topic
 						</th>
 						<th class="text-end">
-							Attendance
+							<a (click)="sortResult('attendeeCount', 'attendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
 						</th>
 					</tr>
 				</thead>
 				<tbody>
+					<tr *ngFor="let practice of practices">
+						<td class="actionsColumn">
+							<div *ngIf="isUserAdmin">
+								<a [routerLink]="['/practices', practice.practiceId]">
+									<i class="bi bi-card-heading" tooltip="Practice details"></i>
+								</a>
+								<a (click)="editClick(practice, practiceModal)">
+									<i class="bi bi-pencil-square" tooltip="Edit practice details"></i>
+								</a>
+								<a *ngIf="practice.attendeeCount==0" (click)="confirmDelete(practice)">
+									<i class="bi bi-trash-fill" tooltip="Delete practice"></i>
+								</a>
+								<i *ngIf="practice.attendeeCount>0" class="bi bi-trash-fill fade-icon"></i>
+							</div>
+						</td>
+						<td class="hidden">{{practice.practiceId}}</td>
+						<td>{{practice.practiceNumber}}</td>
+						<td>{{practice.practiceDate | date: 'yyyy-LL-dd'}}</td>
+						<td>{{practice.practiceTopic}}</td>
+						<td class="text-end">{{practice.attendeeCount}}</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -52,11 +85,11 @@
 		</div>
 		<div class="modal-body">
 			<input class="hidden" formControlName="practiceId" />
-			<div class="form-floating mb-3 col-md-4">
+			<div class="form-floating mb-3 col-4">
 				<input type="text" class="form-control" id="practiceNumber" formControlName="practiceNumber" readonly />
 				<label for="practiceNumber">Practice Number</label>
 			</div>
-			<div class="form-floating mb-3 col-md-6">
+			<div class="form-floating mb-3 col-6">
 				<input type="date" class="form-control" id="practiceDate" formControlName="practiceDate" />
 				<label for="practiceDate">Practice Date</label>
 			</div>
@@ -70,7 +103,7 @@
 			<div class="validator-bottom" *ngIf="validateControl('practiceTopic') && hasError('practiceTopic', 'required')">
 				<em>Practice Topic is required</em>
 			</div>
-			<div class="form-floating mb-3 col-md-6">
+			<div class="form-floating mb-3 col-6">
 				<input type="number" class="form-control" id="practiceCost" formControlName="practiceCost" />
 				<label for="practiceCost">Practice Cost</label>
 			</div>
@@ -80,7 +113,7 @@
 			<div class="validator-bottom" *ngIf="validateControl('practiceCost') && hasError('practiceCost', 'min')">
 				<em>Practice Cost must be greater than or equal to zero.</em>
 			</div>
-			<div class="form-floating mb-3 col-md-6">
+			<div class="form-floating mb-3 col-6">
 				<input type="number" class="form-control" id="miscExpense" formControlName="miscExpense" />
 				<label for="miscExpense">Misc Expense</label>
 			</div>
@@ -90,7 +123,7 @@
 			<div class="validator-bottom" *ngIf="validateControl('miscExpense') && hasError('miscExpense', 'min')">
 				<em>Misc expense must be greater than or equal to zero.</em>
 			</div>
-			<div class="form-floating mb-3 col-md-6">
+			<div class="form-floating mb-3 col-6">
 				<input type="number" class="form-control" id="miscRevenue" formControlName="miscRevenue" />
 				<label for="miscRevenue">Misc Revenue</label>
 			</div>

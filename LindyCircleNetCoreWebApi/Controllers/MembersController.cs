@@ -21,12 +21,11 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/Members
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Member>>> GetMembers() {
-            return await _context.Members
+        public async Task<ActionResult<IEnumerable<Member>>> GetMembers() =>
+            await _context.Members
                 .OrderBy(o => o.LastName)
                 .ThenBy(t => t.FirstName)
                 .ToListAsync();
-        }
 
         // GET: api/Members/5
         [HttpGet("{id}")]
@@ -93,26 +92,22 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool MemberExists(int id) {
-            return _context.Members.Any(e => e.MemberId == id);
-        }
+        private bool MemberExists(int id) => _context.Members.Any(e => e.MemberId == id);
 
         // GET: api/Members/5/Attendances
         [HttpGet("{id}/Attendances")]
-        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByMember(int id) {
-            return await _context.Attendances.Where(w => w.MemberId == id).ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByMember(int id) =>
+            (await _context.Attendances.Where(w => w.MemberId == id).ToListAsync())
+                .OrderBy(o => o.PracticeDate).ToList();
 
         // GET: api/Members/5/PunchCardsHeld
         [HttpGet("{id}/PunchCardsHeld")]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsHeldByMember(int id) {
-            return await _context.PunchCards.Where(w => w.CurrentMemberId == id).ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsHeldByMember(int id) =>
+            await _context.PunchCards.Where(w => w.CurrentMemberId == id).ToListAsync();
 
         // GET: api/Members/5/PunchCardsPurchased
         [HttpGet("{id}/PunchCardsPurchased")]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsPurchasedByMember(int id) {
-            return await _context.PunchCards.Where(w => w.PurchaseMemberId == id).ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsPurchasedByMember(int id) =>
+            await _context.PunchCards.Where(w => w.PurchaseMemberId == id).ToListAsync();
     }
 }

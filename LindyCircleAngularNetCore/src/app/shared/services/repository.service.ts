@@ -77,7 +77,7 @@ export class RepositoryService {
 
 	public updatePractice(practice: Practice): Observable<Practice> {
 		var val = {
-			practiceId: practice.pracitceId,
+			practiceId: practice.practiceId,
 			practiceNumber: practice.practiceNumber,
 			practiceDate: practice.practiceDate,
 			practiceTopic: practice.practiceTopic,
@@ -85,7 +85,7 @@ export class RepositoryService {
 			miscExpense: practice.miscExpense,
 			miscRevenue: practice.miscRevenue
 		};
-		return this.http.put<Practice>(environment.API_URL + 'Practices/' + practice.pracitceId, val);
+		return this.http.put<Practice>(environment.API_URL + 'Practices/' + practice.practiceId, val);
 	}
 
 	public deletePractice(practiceId: number): Observable<any> {

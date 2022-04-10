@@ -19,9 +19,8 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/Attendances
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendances() {
-            return await _context.Attendances.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendances() =>
+            await _context.Attendances.ToListAsync();
 
         // GET: api/Attendances/5
         [HttpGet("{id}")]
@@ -82,8 +81,6 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool AttendanceExists(int id) {
-            return _context.Attendances.Any(e => e.AttendanceId == id);
-        }
+        private bool AttendanceExists(int id) => _context.Attendances.Any(e => e.AttendanceId == id);
     }
 }
