@@ -9,17 +9,14 @@
 				<input type="date" class="form-control" id="endDateFilter" [(ngModel)]="endDateFilter" (blur)="filterPractices()" />
 				<label for="endDateFilter" class="ms-2">Ending Date</label>
 			</div>
-			<div class="col-6">
-				<button *ngIf="isUserAdmin" type="button" class="btn btn-dark m-2 float-end" (click)="addClick(practiceModal)">Add New Practice</button>
-			</div>
 		</div>
 
 		<div class="table-fix-head table-clear-float">
-			<table class="table table-striped table-hover text-nowrap row-md">
+			<table class="table table-striped table-hover row-md">
 				<thead>
 					<tr>
-						<th style="width: 92px;">
-							<div *ngIf="isUserAdmin" style="text-align: center;">
+						<th style="width: 62px;">
+							<div *ngIf="isUserAdmin" style="text-align: center; padding-right: 6px;">
 								Actions
 							</div>
 							<div *ngIf="!isUserAdmin" style="text-align: center;">
@@ -29,7 +26,7 @@
 						<th class="hidden">
 							ID
 						</th>
-						<th>
+						<th style="width: 68px;">
 							<a (click)="sortResult('practiceNumber', 'numberSort');">Num <i class="bi bi-arrow-down-up"></i></a>
 						</th>
 						<th>
@@ -44,20 +41,29 @@
 							</div>
 							Topic
 						</th>
-						<th class="text-end">
-							<a (click)="sortResult('attendeeCount', 'attendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
+						<th class="text-end" style="width: 70px;">
+							<a (click)="sortResult('practiceCost', 'practiceCostSort');">Rental Cost <i class="bi bi-arrow-down-up"></i></a>
+						</th>
+						<th class="text-end" style="width: 96px;">
+							<a (click)="sortResult('attendanceRevenue', 'attendanceRevenueSort');">Attendance Revenue <i class="bi bi-arrow-down-up"></i></a>
+						</th>
+						<th class="text-end" style="width: 96px;">
+							<a (click)="sortResult('miscExpense', 'miscExpenseSort');">Misc Expense <i class="bi bi-arrow-down-up"></i></a>
+						</th>
+						<th class="text-end" style="width: 96px;">
+							<a (click)="sortResult('miscRevenue', 'miscRevenueSort');">Misc Revenue <i class="bi bi-arrow-down-up"></i></a>
+						</th>
+						<th class="text-end" style="width: 84px;">
+							<a (click)="sortResult('attendeeCount', 'attendanceSort');">Atten- dance <i class="bi bi-arrow-down-up"></i></a>
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="text-nowrap">
 					<tr *ngFor="let practice of practices">
 						<td class="actionsColumn">
 							<div *ngIf="isUserAdmin">
 								<a [routerLink]="['/practices', practice.practiceId]">
 									<i class="bi bi-card-heading" tooltip="Practice details"></i>
-								</a>
-								<a (click)="editClick(practice, practiceModal)">
-									<i class="bi bi-pencil-square" tooltip="Edit practice details"></i>
 								</a>
 								<a *ngIf="practice.attendeeCount==0" (click)="confirmDelete(practice)">
 									<i class="bi bi-trash-fill" tooltip="Delete practice"></i>
@@ -68,7 +74,11 @@
 						<td class="hidden">{{practice.practiceId}}</td>
 						<td>{{practice.practiceNumber}}</td>
 						<td>{{practice.practiceDate | date: 'yyyy-LL-dd'}}</td>
-						<td>{{practice.practiceTopic}}</td>
+						<td class="text-wrap">{{practice.practiceTopic}}</td>
+						<td class="text-end">{{practice.practiceCost | number: '1.2-2'}}</td>
+						<td class="text-end">{{practice.attendanceRevenue | number: '1.2-2'}}</td>
+						<td class="text-end">{{practice.miscExpense | number: '1.2-2'}}</td>
+						<td class="text-end">{{practice.miscRevenue | number: '1.2-2'}}</td>
 						<td class="text-end">{{practice.attendeeCount}}</td>
 					</tr>
 				</tbody>
@@ -84,7 +94,6 @@
 			<button type="button" class="btn-close" (click)="closePracticeForm()"></button>
 		</div>
 		<div class="modal-body">
-			<input class="hidden" formControlName="practiceId" />
 			<div class="form-floating mb-3 col-4">
 				<input type="text" class="form-control" id="practiceNumber" formControlName="practiceNumber" readonly />
 				<label for="practiceNumber">Practice Number</label>

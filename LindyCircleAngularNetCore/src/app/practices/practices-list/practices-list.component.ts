@@ -6,7 +6,7 @@ import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { DateFormatService } from '@app-shared/services/date-format.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
-import { TableSortService } from '@app-shared/services/table-sort.service';
+import { SortingService } from '@app-shared/services/sorting.service';
 import { Practice } from 'app/practices/models/practice.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
@@ -20,7 +20,7 @@ export class PracticesListComponent implements OnInit {
 
 	constructor(private modalService: BsModalService,
 		private repository: RepositoryService,
-		private sorter: TableSortService,
+		private sorter: SortingService,
 		private formBuilder: FormBuilder,
 		private authService: AuthenticationService,
 		private dateFormatService: DateFormatService) { }
@@ -49,29 +49,34 @@ export class PracticesListComponent implements OnInit {
 	startDateFilter: Date | undefined;
 	endDateFilter: Date | undefined;
 
-	numberSort: boolean = true;
-	dateSort: boolean = true;
+	numberSort: boolean = false;
+	dateSort: boolean = false;
 	attendanceSort: boolean = true;
+	practiceCostSort: boolean = true;
+	attendanceRevenueSort: boolean = true;
+	miscExpenseSort: boolean = true;
+	miscRevenueSort: boolean = true;
 
 	deleteId: number = 0;
 
 	ngOnInit(): void {
-		this.getPractices();
 		this.getNextPracticeNumber();
 		this.getDefaultRentalCost();
+		this.getPractices();
 	}
 
-	getPractices() {
-		this.modalRef = this.modalService.show(LoadingComponent);
-		this.repository.getPractices().subscribe(data => {
-			this.practices = data;
-			this.practicesWithoutFilter = data;
-			this.filterPractices;
-			this.modalRef!.hide();
-		})
+	getPractices(): void {
+		const modalRef = this.modalService.show(LoadingComponent);
+		this.repository.getPractices().subscribe(
+			res => {
+				this.practices = res;
+				this.practicesWithoutFilter = res;
+				this.filterPractices;
+				setTimeout(() => { modalRef.hide() }, 500);
+			});
 	}
 
-	getNextPracticeNumber() {
+	getNextPracticeNumber(): void {
 		this.repository.getNextPracticeNumber().subscribe(
 			res => {
 				this.nextPracticeNumber = res;
@@ -79,7 +84,7 @@ export class PracticesListComponent implements OnInit {
 		);
 	}
 
-	getDefaultRentalCost() {
+	getDefaultRentalCost(): void {
 		this.repository.getDefaultValue('Rental cost').subscribe(
 			res => {
 				this.defaultRentalCost = res;
@@ -87,7 +92,7 @@ export class PracticesListComponent implements OnInit {
 		);
 	}
 
-	filterPractices() {
+	filterPractices(): void {
 		var topicFilter = this.practiceTopicFilter;
 		var startDateFilter = this.startDateFilter;
 		var endDateFilter = this.endDateFilter;
@@ -104,13 +109,13 @@ export class PracticesListComponent implements OnInit {
 		);
 	}
 
-	sortResult(col: string, sort: string) {
+	sortResult(col: string, sort: string): void {
 		var asc = Reflect.get(this, sort);
 		Reflect.set(this, sort, !asc);
 		this.practices = this.sorter.sort(this.practices, col, asc);
 	}
 
-	addClick(practiceModal: TemplateRef<any>) {
+	addClick(practiceModal: TemplateRef<any>): void {
 		this.practiceForm.setValue({
 			'practiceId': 0,
 			'practiceNumber': this.nextPracticeNumber,
@@ -124,7 +129,7 @@ export class PracticesListComponent implements OnInit {
 		this.modalRef = this.modalService.show(practiceModal);
 	}
 
-	editClick(practice: Practice, practiceModal: TemplateRef<any>) {
+	editClick(practice: Practice, practiceModal: TemplateRef<any>): void {
 		this.practiceForm.setValue({
 			'practiceId': practice.practiceId,
 			'practiceNumber': practice.practiceNumber,
@@ -138,12 +143,12 @@ export class PracticesListComponent implements OnInit {
 		this.modalRef = this.modalService.show(practiceModal);
 	}
 
-	validateControl = (controlName: string) =>
+	validateControl = (controlName: string): boolean =>
 		this.practiceForm.controls[controlName].invalid && this.practiceForm.controls[controlName].touched;
 
-	hasError = (controlName: string, errorName: string) => this.practiceForm.controls[controlName].hasError(errorName);
+	hasError = (controlName: string, errorName: string): boolean => this.practiceForm.controls[controlName].hasError(errorName);
 
-	onPracticeFormSubmit() {
+	onPracticeFormSubmit(): void {
 		if (this.practiceForm.value.practiceId == 0) {
 			this.repository.addPractice(this.practiceForm.value).subscribe(
 				res => {
@@ -165,12 +170,12 @@ export class PracticesListComponent implements OnInit {
 		}
 	}
 
-	closePracticeForm() {
+	closePracticeForm(): void {
 		this.practiceForm.reset();
 		this.modalRef?.hide();
 	}
 
-	confirmDelete(practice: Practice) {
+	confirmDelete(practice: Practice): void {
 		this.deleteId = practice.practiceId;
 		const initialState: ModalOptions = {
 			initialState: {
@@ -184,7 +189,7 @@ export class PracticesListComponent implements OnInit {
 		});
 	}
 
-	deletePractice() {
+	deletePractice(): void {
 		this.repository.deletePractice(this.deleteId).subscribe(
 			_ => {
 				this.showOkModal("Success", "Practice deleted.");
@@ -193,7 +198,7 @@ export class PracticesListComponent implements OnInit {
 		);
 	}
 
-	showOkModal(title: string, body: string = "") {
+	showOkModal(title: string, body: string = ""): void {
 		const initialState: ModalOptions = {
 			initialState: {
 				modalTitle: title,

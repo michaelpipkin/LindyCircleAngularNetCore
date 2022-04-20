@@ -17,8 +17,8 @@ import { Observable, Subject } from 'rxjs';
 })
 
 export class AuthenticationService {
-    private authChangeSub = new Subject<boolean>();
-    authChanged = this.authChangeSub.asObservable();
+	private authChangeSub = new Subject<boolean>();
+	authChanged = this.authChangeSub.asObservable();
 
     constructor(private http: HttpClient,
         private jwtHelper: JwtHelperService) { }
@@ -38,7 +38,7 @@ export class AuthenticationService {
         this.http.post<AuthResponseDto>(environment.API_URL + 'Accounts/Login', body);
 
     public sendAuthStateChangeNotification = (isAuthenticated: boolean) =>
-        this.authChangeSub.next(isAuthenticated);
+		this.authChangeSub.next(isAuthenticated);
 
     public logout(): void {
         localStorage.removeItem("token");

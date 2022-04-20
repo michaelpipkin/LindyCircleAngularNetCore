@@ -5,7 +5,7 @@ import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
-import { TableSortService } from '@app-shared/services/table-sort.service';
+import { SortingService } from '@app-shared/services/sorting.service';
 import { Member } from 'app/members/models/member.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
@@ -19,7 +19,7 @@ export class MembersListComponent implements OnInit {
 
 	constructor(private modalService: BsModalService,
 		private repository: RepositoryService,
-		private sorter: TableSortService,
+		private sorter: SortingService,
 		private formBuilder: FormBuilder,
 		private authService: AuthenticationService) { }
 
@@ -54,13 +54,14 @@ export class MembersListComponent implements OnInit {
 	}
 
 	getMembers() {
-		this.modalRef = this.modalService.show(LoadingComponent);
-		this.repository.getMembers().subscribe(data => {
-			this.members = data;
-			this.membersWithoutFilter = data;
-			this.filterMembers();
-			this.modalRef!.hide();
-		});
+		const modalRef = this.modalService.show(LoadingComponent);
+		this.repository.getMembers().subscribe(
+			res => {
+				this.members = res;
+				this.membersWithoutFilter = res;
+				this.filterMembers();
+				setTimeout(() => { modalRef.hide() }, 500);
+			});
 	}
 
 	filterMembers() {

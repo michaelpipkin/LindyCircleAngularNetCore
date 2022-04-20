@@ -1,13 +1,12 @@
 ﻿using LindyCircleWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
     [Route("api/Attendances")]
+    [Authorize]
     [ApiController]
     public class AttendancesController : ControllerBase
     {
@@ -34,8 +33,20 @@ namespace LindyCircleWebApi.Controllers
             return attendance;
         }
 
+        // GET: api/Attendaces/Member/5
+        [HttpGet("Member/{id}")]
+        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByMember(int id) =>
+            (await _context.Attendances.Where(w => w.MemberId == id).ToListAsync())
+                .OrderBy(o => o.PracticeDate).ToList();
+
+        // GET: api/Attendaces/Practice/5
+        [HttpGet("Practice/{id}")]
+        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByPractice(int id) =>
+            (await _context.Attendances.Where(w => w.PracticeId == id).ToListAsync())
+            .OrderBy(o => o.MemberName).ToList();
+
         // PUT: api/Attendances/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAttendance(int id, Attendance attendance) {
             if (id != attendance.AttendanceId) {
                 return BadRequest();
@@ -59,7 +70,7 @@ namespace LindyCircleWebApi.Controllers
         }
 
         // POST: api/Attendances
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<Attendance>> PostAttendance(Attendance attendance) {
             _context.Attendances.Add(attendance);
             await _context.SaveChangesAsync();
@@ -68,7 +79,7 @@ namespace LindyCircleWebApi.Controllers
         }
 
         // DELETE: api/Attendances/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAttendance(int id) {
             var attendance = await _context.Attendances.FindAsync(id);
             if (attendance == null) {

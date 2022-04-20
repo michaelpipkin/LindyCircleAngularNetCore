@@ -1,10 +1,12 @@
 ﻿using LindyCircleWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LindyCircleWebApi.Controllers
 {
     [Route("api/Practices")]
+    [Authorize]
     [ApiController]
     public class PracticesController : ControllerBase {
         private readonly LindyCircleDbContext _context;
@@ -16,12 +18,24 @@ namespace LindyCircleWebApi.Controllers
         // GET: api/Practices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Practice>>> GetPractices() =>
-            (await _context.Practices.ToListAsync()).OrderBy(o => o.PracticeNumber).ToList();
+            (await _context.Practices.ToListAsync()).OrderByDescending(o => o.PracticeNumber).ToList();
 
         // GET: api/Practices/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Practice>> GetPractice(int id) {
             var practice = await _context.Practices.FindAsync(id);
+
+            if (practice == null) {
+                return NotFound();
+            }
+
+            return practice;
+        }
+
+        // GET: api/Practices/Date/2022-12-31
+        [HttpGet("Date/{practiceDate}")]
+        public async Task<ActionResult<Practice>> GetPracticeByDate(DateTime practiceDate) {
+            var practice = await _context.Practices.SingleOrDefaultAsync(s => s.PracticeDate == practiceDate);
 
             if (practice == null) {
                 return NotFound();
@@ -42,12 +56,6 @@ namespace LindyCircleWebApi.Controllers
             return practice;
         }
 
-        // GET: api/Practices/5/Attendance
-        [HttpGet("{id}/Attendance")]
-        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendanceByPractice(int id) =>
-            (await _context.Attendances.Where(w => w.PracticeId == id).ToListAsync())
-            .OrderBy(o => o.MemberName).ToList();
-
         // GET: api/Practices/Next
         [HttpGet("Next")]
         public int GetNextPracticeNumber() {
@@ -56,7 +64,7 @@ namespace LindyCircleWebApi.Controllers
         }
 
         // PUT: api/Practices/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<Practice>> PutPractice(int id, Practice practice) {
             if (id != practice.PracticeId) {
                 return BadRequest();
@@ -80,7 +88,7 @@ namespace LindyCircleWebApi.Controllers
         }
 
         // POST: api/Practices
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<Practice>> PostPractice(Practice practice) {
             _context.Practices.Add(practice);
             await _context.SaveChangesAsync();
@@ -89,7 +97,7 @@ namespace LindyCircleWebApi.Controllers
         }
 
         // DELETE: api/Practices/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePractice(int id) {
             var practice = await _context.Practices.FindAsync(id);
             if (practice == null) {

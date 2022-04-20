@@ -25,15 +25,17 @@ export class PracticeDetailsComponent implements OnInit {
 		const routeParams = this.route.snapshot.paramMap;
 		const practiceIdFromRoute = Number(routeParams.get('practiceId'));
 
-		this.repository.getPractice(practiceIdFromRoute).subscribe(data => {
-			this.practice = data;
-		});
+		this.repository.getPractice(practiceIdFromRoute).subscribe(
+			res => {
+				this.practice = res;
+			});
 
-		this.repository.getAttendanceForPractice(practiceIdFromRoute).subscribe(data => {
-			this.attendances = data;
-			this.totalAttendanceAmount = data.reduce(
-				(runningTotal, attendance) => runningTotal + attendance.paymentAmount, 0
-			);
-		});
+		this.repository.getAttendanceForPractice(practiceIdFromRoute).subscribe(
+			res => {
+				this.attendances = res;
+				this.totalAttendanceAmount = res.reduce(
+					(runningTotal, attendance) => runningTotal + attendance.paymentAmount, 0
+				);
+			});
 	}
 }

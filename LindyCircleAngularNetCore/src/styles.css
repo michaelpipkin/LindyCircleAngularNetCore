@@ -68,10 +68,21 @@ em {
 }
 
 .actionsColumn {
-	width: 92px;
 	padding-left: 0px;
 	padding-right: 0px;
 }
+
+	.actionsColumn div:first-of-type {
+		text-align: center;
+	}
+
+	.actionsColumn i:first-of-type {
+		margin-left: 4px;
+	}
+
+	.actionsColumn i:last-of-type {
+		margin-right: 4px;
+	}
 
 .row-md tbody tr td, .row-md tfoot tr td {
 	padding-top: 4px;

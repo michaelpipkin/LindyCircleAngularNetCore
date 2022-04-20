@@ -5,6 +5,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
 import { ErrorNotificationComponent } from '@app-shared/error-notification/error-notification.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { ErrorHandlerService } from '@app-shared/services/error-handler.service';
 import { YesnoDialogComponent } from '@app-shared/yesno-dialog/yesno-dialog.component';
@@ -18,11 +19,11 @@ import { MemberDetailsComponent } from 'app/members/member-details/member-detail
 import { MembersListComponent } from 'app/members/members-list/members-list.component';
 import { PracticeDetailsComponent } from 'app/practices/practice-details/practice-details.component';
 import { PracticesListComponent } from 'app/practices/practices-list/practices-list.component';
+import { PunchCardsComponent } from 'app/punch-cards/punch-cards/punch-cards.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule, MODAL_CONFIG_DEFAULT_OVERRIDE } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-import { LoadingComponent } from './shared/loading/loading.component';
 
 @NgModule({
 	declarations: [
@@ -38,7 +39,8 @@ import { LoadingComponent } from './shared/loading/loading.component';
 		PracticesListComponent,
 		PracticeDetailsComponent,
 		FooterComponent,
-  LoadingComponent
+		LoadingComponent,
+		PunchCardsComponent
 	],
 	imports: [
 		BrowserModule,

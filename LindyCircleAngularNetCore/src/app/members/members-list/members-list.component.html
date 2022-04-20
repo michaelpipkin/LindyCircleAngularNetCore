@@ -10,7 +10,7 @@
                             <div style="text-align: right; line-height: 20px; padding-bottom: 8px; padding-right: 4px;">
                                 Search
                             </div>
-                            <div *ngIf="isUserAdmin" style="text-align: center;">
+                            <div *ngIf="isUserAdmin" style="text-align: center; padding-right: 6px;">
                                 Actions
                             </div>
                             <div *ngIf="!isUserAdmin" style="text-align: center;">
@@ -91,7 +91,6 @@
             <button type="button" class="btn-close" (click)="closeMemberForm()"></button>
         </div>
         <div class="modal-body">
-            <input class="hidden" formControlName="memberId" />
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="firstName" placeholder="First Name" formControlName="firstName" />
                 <label for="firstName">First Name</label>

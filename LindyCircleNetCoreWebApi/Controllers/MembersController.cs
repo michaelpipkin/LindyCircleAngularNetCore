@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
@@ -25,6 +22,24 @@ namespace LindyCircleWebApi.Controllers
             await _context.Members
                 .OrderBy(o => o.LastName)
                 .ThenBy(t => t.FirstName)
+                .ToListAsync();
+
+        // GET: api/Members/Active
+        [HttpGet("Active")]
+        public async Task<ActionResult<IEnumerable<Member>>> GetActiveMembers() =>
+            await _context.Members
+                .Where(w => !w.Inactive)
+                .OrderBy(o => o.LastName)
+                .ThenBy(t => t.FirstName)
+                .ToListAsync();
+
+        // GET: api/Members/Transfer/5
+        [HttpGet("Transfer/{id}")]
+        public async Task<ActionResult<IEnumerable<Member>>> GetTransferMembers(int id) =>
+            await _context.Members
+                .Where(w => !w.Inactive && w.MemberId != id)
+                .OrderBy(o => o.FirstName)
+                .ThenBy(t => t.LastName)
                 .ToListAsync();
 
         // GET: api/Members/5
@@ -94,20 +109,5 @@ namespace LindyCircleWebApi.Controllers
 
         private bool MemberExists(int id) => _context.Members.Any(e => e.MemberId == id);
 
-        // GET: api/Members/5/Attendances
-        [HttpGet("{id}/Attendances")]
-        public async Task<ActionResult<IEnumerable<Attendance>>> GetAttendancesByMember(int id) =>
-            (await _context.Attendances.Where(w => w.MemberId == id).ToListAsync())
-                .OrderBy(o => o.PracticeDate).ToList();
-
-        // GET: api/Members/5/PunchCardsHeld
-        [HttpGet("{id}/PunchCardsHeld")]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsHeldByMember(int id) =>
-            await _context.PunchCards.Where(w => w.CurrentMemberId == id).ToListAsync();
-
-        // GET: api/Members/5/PunchCardsPurchased
-        [HttpGet("{id}/PunchCardsPurchased")]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsPurchasedByMember(int id) =>
-            await _context.PunchCards.Where(w => w.PurchaseMemberId == id).ToListAsync();
     }
 }
