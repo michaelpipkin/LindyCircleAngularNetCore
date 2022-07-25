@@ -1,10 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
 import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
-import { DateFormatService } from '@app-shared/services/date-format.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Practice } from 'app/practices/models/practice.model';
@@ -21,9 +19,7 @@ export class PracticesListComponent implements OnInit {
 	constructor(private modalService: BsModalService,
 		private repository: RepositoryService,
 		private sorter: SortingService,
-		private formBuilder: FormBuilder,
-		private authService: AuthenticationService,
-		private dateFormatService: DateFormatService) { }
+		private authService: AuthenticationService) { }
 
 	isUserAdmin: boolean = this.authService.isUserAdmin();
 
@@ -34,16 +30,6 @@ export class PracticesListComponent implements OnInit {
 	practicesWithoutFilter: Practice[] = [];
 	defaultRentalCost: number = 0;
 	nextPracticeNumber: number = 0;
-
-	practiceForm = this.formBuilder.group({
-		practiceId: 0,
-		practiceNumber: 0,
-		practiceDate: [new Date(), Validators.required],
-		practiceTopic: ['', Validators.required],
-		practiceCost: [0, [Validators.required, Validators.min(0)]],
-		miscExpense: [0, [Validators.required, Validators.min(0)]],
-		miscRevenue: [0, [Validators.required, Validators.min(0)]]
-	});
 
 	practiceTopicFilter: string = "";
 	startDateFilter: Date | undefined;
@@ -60,8 +46,6 @@ export class PracticesListComponent implements OnInit {
 	deleteId: number = 0;
 
 	ngOnInit(): void {
-		this.getNextPracticeNumber();
-		this.getDefaultRentalCost();
 		this.getPractices();
 	}
 
@@ -74,22 +58,6 @@ export class PracticesListComponent implements OnInit {
 				this.filterPractices;
 				setTimeout(() => { modalRef.hide() }, 500);
 			});
-	}
-
-	getNextPracticeNumber(): void {
-		this.repository.getNextPracticeNumber().subscribe(
-			res => {
-				this.nextPracticeNumber = res;
-			}
-		);
-	}
-
-	getDefaultRentalCost(): void {
-		this.repository.getDefaultValue('Rental cost').subscribe(
-			res => {
-				this.defaultRentalCost = res;
-			}
-		);
 	}
 
 	filterPractices(): void {
@@ -113,66 +81,6 @@ export class PracticesListComponent implements OnInit {
 		var asc = Reflect.get(this, sort);
 		Reflect.set(this, sort, !asc);
 		this.practices = this.sorter.sort(this.practices, col, asc);
-	}
-
-	addClick(practiceModal: TemplateRef<any>): void {
-		this.practiceForm.setValue({
-			'practiceId': 0,
-			'practiceNumber': this.nextPracticeNumber,
-			'practiceDate': this.dateFormatService.formatDate(new Date()),
-			'practiceTopic': '',
-			'practiceCost': this.defaultRentalCost,
-			'miscExpense': 0,
-			'miscRevenue': 0
-		});
-		this.modalTitle = 'Add Practice';
-		this.modalRef = this.modalService.show(practiceModal);
-	}
-
-	editClick(practice: Practice, practiceModal: TemplateRef<any>): void {
-		this.practiceForm.setValue({
-			'practiceId': practice.practiceId,
-			'practiceNumber': practice.practiceNumber,
-			'practiceDate': practice.practiceDateString,
-			'practiceTopic': practice.practiceTopic,
-			'practiceCost': practice.practiceCost,
-			'miscExpense': practice.miscExpense,
-			'miscRevenue': practice.miscRevenue
-		});
-		this.modalTitle = 'Edit Practice';
-		this.modalRef = this.modalService.show(practiceModal);
-	}
-
-	validateControl = (controlName: string): boolean =>
-		this.practiceForm.controls[controlName].invalid && this.practiceForm.controls[controlName].touched;
-
-	hasError = (controlName: string, errorName: string): boolean => this.practiceForm.controls[controlName].hasError(errorName);
-
-	onPracticeFormSubmit(): void {
-		if (this.practiceForm.value.practiceId == 0) {
-			this.repository.addPractice(this.practiceForm.value).subscribe(
-				res => {
-					this.closePracticeForm();
-					this.getPractices();
-					this.getNextPracticeNumber();
-					this.showOkModal("Success", `Practice #${res.practiceNumber} on ${res.practiceDateString} added.`);
-				}
-			);
-		}
-		else {
-			this.repository.updatePractice(this.practiceForm.value).subscribe(
-				res => {
-					this.closePracticeForm();
-					this.getPractices();
-					this.showOkModal("Success", `Practice #${res.practiceNumber} updated.`);
-				}
-			);
-		}
-	}
-
-	closePracticeForm(): void {
-		this.practiceForm.reset();
-		this.modalRef?.hide();
 	}
 
 	confirmDelete(practice: Practice): void {

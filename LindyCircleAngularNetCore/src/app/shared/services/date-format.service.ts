@@ -11,7 +11,7 @@ export class DateFormatService {
 	formatDate(date: Date) {
 		var d = new Date(date),
 			month = '' + (d.getMonth() + 1),
-			day = '' + d.getDate(),
+			day = '' + (d.getDate()),
 			year = d.getFullYear();
 
 		if (month.length < 2)

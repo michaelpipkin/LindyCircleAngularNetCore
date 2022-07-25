@@ -26,19 +26,19 @@ namespace LindyCircleWebApi.Controllers
             var practice = await _context.Practices.FindAsync(id);
 
             if (practice == null) {
-                return NotFound();
+                return NoContent();
             }
 
             return practice;
         }
 
-        // GET: api/Practices/Date/2022-12-31
-        [HttpGet("Date/{practiceDate}")]
-        public async Task<ActionResult<Practice>> GetPracticeByDate(DateTime practiceDate) {
+        // GET: api/Practices/Date
+        [HttpGet("Date")]
+        public async Task<ActionResult<Practice>> GetPracticeByDate([FromQuery] DateTime practiceDate) {
             var practice = await _context.Practices.SingleOrDefaultAsync(s => s.PracticeDate == practiceDate);
 
             if (practice == null) {
-                return NotFound();
+                return NoContent();
             }
 
             return practice;
@@ -50,7 +50,7 @@ namespace LindyCircleWebApi.Controllers
             var practice = await _context.Practices.SingleOrDefaultAsync(s => s.PracticeNumber == practiceNumber);
 
             if (practice == null) {
-                return NotFound();
+                return NoContent();
             }
 
             return practice;

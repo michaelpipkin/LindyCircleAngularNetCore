@@ -1,0 +1,63 @@
+<main class="row-md justify-content-center">
+	<div class="col col-6" style="min-width: 700px;">
+		
+		<form [formGroup]="attendanceForm" (ngSubmit)="onAttendanceFormSubmit()">
+
+		</form>
+	</div>
+</main>
+
+<ng-template #practiceModal>
+	<form [formGroup]="practiceForm" (ngSubmit)="onPracticeFormSubmit()">
+		<div class="form-floating mb-3 col-3">
+			<input type="text" id="practiceId" formControlName="practiceId" hidden />
+			<input type="text" class="form-control" id="practiceNumber" formControlName="practiceNumber" readonly />
+			<label for="practiceNumber">Practice Number</label>
+		</div>
+		<div class="form-floating mb-3 col-4">
+			<input type="date" class="form-control" id="practiceDate" formControlName="practiceDate" (change)="onDateChange()" />
+			<label for="practiceDate">Practice Date</label>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('practiceDate') && hasError('practiceDate', 'required')">
+			<em>Practice Date is required</em>
+		</div>
+		<div class="form-floating mb-3">
+			<input type="text" class="form-control" id="practiceTopic" formControlName="practiceTopic" />
+			<label for="practiceTopic">Practice Topic</label>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('practiceTopic') && hasError('practiceTopic', 'required')">
+			<em>Practice Topic is required</em>
+		</div>
+		<div class="form-floating mb-3 col-3">
+			<input type="number" class="form-control" id="practiceCost" formControlName="practiceCost" />
+			<label for="practiceCost">Practice Cost</label>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('practiceCost') && hasError('practiceCost', 'required')">
+			<em>Practice Cost is required</em>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('practiceCost') && hasError('practiceCost', 'min')">
+			<em>Practice Cost must be greater than or equal to zero.</em>
+		</div>
+		<div class="form-floating mb-3 col-3">
+			<input type="number" class="form-control" id="miscExpense" formControlName="miscExpense" />
+			<label for="miscExpense">Misc Expense</label>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('miscExpense') && hasError('miscExpense', 'required')">
+			<em>Misc Expense is required</em>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('miscExpense') && hasError('miscExpense', 'min')">
+			<em>Misc expense must be greater than or equal to zero.</em>
+		</div>
+		<div class="form-floating mb-3 col-3">
+			<input type="number" class="form-control" id="miscRevenue" formControlName="miscRevenue" />
+			<label for="miscRevenue">Misc Revenue</label>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('miscRevenue') && hasError('miscRevenue', 'required')">
+			<em>Misc Revenue is required</em>
+		</div>
+		<div class="validator-bottom" *ngIf="validateControl('miscRevenue') && hasError('miscRevenue', 'min')">
+			<em>Misc revenue must be greater than or equal to zero.</em>
+		</div>
+		<button type="submit" class="btn btn-primary" [disabled]="!practiceForm.valid">Save</button>
+	</form>
+</ng-template>

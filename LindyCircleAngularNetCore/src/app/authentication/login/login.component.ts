@@ -27,6 +27,14 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+		//For debugging only - delete this region before publishing
+		//#region Debugging login
+		this.loginForm.patchValue({
+			'userName': 'mpipkin',
+			'password': 'Dance5^7*'
+		});
+		this.loginUser();
+		//#endregion
 	}
 
 	validateControl = (controlName: string) =>

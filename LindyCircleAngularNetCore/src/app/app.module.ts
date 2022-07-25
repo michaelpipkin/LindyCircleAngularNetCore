@@ -12,6 +12,7 @@ import { YesnoDialogComponent } from '@app-shared/yesno-dialog/yesno-dialog.comp
 import { JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
+import { AttendanceDetailsComponent } from 'app/attendances/attendance-details/attendance-details.component';
 import { FooterComponent } from 'app/core/components/footer/footer.component';
 import { NavbarComponent } from 'app/core/components/navbar/navbar.component';
 import { HomeComponent } from 'app/home/home.component';
@@ -40,7 +41,8 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 		PracticeDetailsComponent,
 		FooterComponent,
 		LoadingComponent,
-		PunchCardsComponent
+		PunchCardsComponent,
+		AttendanceDetailsComponent
 	],
 	imports: [
 		BrowserModule,
