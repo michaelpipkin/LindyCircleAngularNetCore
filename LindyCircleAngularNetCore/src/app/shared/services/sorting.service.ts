@@ -4,13 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 
-export class TableSortService {
+export class SortingService {
 
     constructor() { }
 
-    sort(data: any[], col: string, sort: string) {
-        var asc = Reflect.get(this, sort);
-        Reflect.set(this, sort, !asc);
+    sort(data: any[], col: string, asc: boolean) {
         data = data.sort(function (a: any, b: any) {
             if (asc)
                 return (a[col] > b[col]) ? 1 : ((a[col] < b[col]) ? -1 : 0);

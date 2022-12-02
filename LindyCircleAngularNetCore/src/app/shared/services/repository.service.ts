@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DateFormatService } from '@app-shared/services/date-format.service';
 import { environment } from '@env/environment';
 import { Attendance } from 'app/attendances/models/attendance.model';
 import { Member } from 'app/members/models/member.model';
@@ -8,87 +9,144 @@ import { PunchCard } from 'app/punch-cards/models/punch-card.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+	providedIn: 'root'
 })
 
 export class RepositoryService {
 
-    constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient,
+		private dateFormatter: DateFormatService) { }
 
-//#region Member functions
-    public getMembers(): Observable<Member[]> {
-        return this.http.get<Member[]>(environment.API_URL + 'Members');
-    }
+	//#region Member functions
+	public getMembers = (): Observable<Member[]> => this.http.get<Member[]>(environment.API_URL + 'Members');
 
-    public getMember(memberId: number): Observable<Member> {
-        return this.http.get<Member>(environment.API_URL + 'Members/' + memberId);
-    }
+	public getActiveMembers = (): Observable<Member[]> => this.http.get<Member[]>(environment.API_URL + 'Members/Active');
 
-    public addMember(member: Member): Observable<Member> {
-        var val = {
-            memberId: 0,
-            firstName: member.firstName,
-            lastName: member.lastName,
-            inactive: false
-        };
-        return this.http.post<Member>(environment.API_URL + 'Members', val);
-    }
+	public getTransferMembers = (memberId: number): Observable<Member[]> =>
+		this.http.get<Member[]>(environment.API_URL + 'Members/Transfer/' + memberId);
 
-    public updateMember(member: Member): Observable<Member> {
-        var val = {
-            memberId: member.memberId,
-            firstName: member.firstName,
-            lastName: member.lastName,
-            inactive: member.inactive
-        };
-        return this.http.put<Member>(environment.API_URL + 'Members/' + member.memberId, val);
-    }
+	public getMember = (memberId: number): Observable<Member> =>
+		this.http.get<Member>(environment.API_URL + 'Members/' + memberId);
 
-    public deleteMember(memberId: number): Observable<any> {
-        return this.http.delete(environment.API_URL + 'Members/' + memberId);
-    }
-//#endregion
+	public addMember(member: Member): Observable<Member> {
+		var val = {
+			memberId: 0,
+			firstName: member.firstName,
+			lastName: member.lastName,
+			inactive: false
+		};
+		return this.http.post<Member>(environment.API_URL + 'Members', val);
+	}
 
-//#region Practice functions
-    public getPractices(): Observable<Practice[]> {
-        return this.http.get<Practice[]>(environment.API_URL + 'Practices');
-    }
+	public updateMember(member: Member): Observable<Member> {
+		var val = {
+			memberId: member.memberId,
+			firstName: member.firstName,
+			lastName: member.lastName,
+			inactive: member.inactive
+		};
+		return this.http.put<Member>(environment.API_URL + 'Members/' + member.memberId, val);
+	}
 
-    public getPractice(practiceId: number): Observable<Practice> {
-        return this.http.get<Practice>(environment.API_URL + 'Practices/' + practiceId);
-    }
+	public deleteMember = (memberId: number): Observable<any> =>
+		this.http.delete(environment.API_URL + 'Members/' + memberId);
+	//#endregion
 
-    public getNextPracticeNumber(): Observable<number> {
-        return this.http.get<number>(environment.API_URL + 'Practices/Next');
-    }
+	//#region Practice functions
+	public getPractices = (): Observable<Practice[]> =>
+		this.http.get<Practice[]>(environment.API_URL + 'Practices');
 
-    public addPractice(practice: Practice): Observable<any> {
-        var val = {
-            practiceId: 0,
-            practiceNumber: practice.practiceNumber,
-            practiceDate: practice.practiceDate,
-            practiceTopic: practice.practiceTopic,
-            practiceCost: practice.practiceCost,
-            miscExpense: practice.miscExpense,
-            miscRevenue: practice.miscRevenue
-        };
-        return this.http.post<Practice>(environment.API_URL + 'Practices', val);
-    }
-//#endregion
+	public getPractice = (practiceId: number): Observable<Practice> =>
+		this.http.get<Practice>(environment.API_URL + 'Practices/' + practiceId);
 
-//#region Punch card functions
-    public getPunchCardsPurchasedByMember(memberId: number): Observable<PunchCard[]> {
-        return this.http.get<PunchCard[]>(environment.API_URL + 'Members/' + memberId + '/PunchCardsPurchased');
-    }
-//#endregion
+	public getPracticeByDate(practiceDate: Date): Observable<Practice> {
+		var queryParams = new HttpParams();
+		queryParams = queryParams.append("practiceDate", practiceDate.toString());
+		return this.http.get<Practice>(environment.API_URL + 'Practices/Date', { params: queryParams });
+	}
 
-//#region Attendance functions
-    public getAttendanceForMember(memberId: number): Observable<Attendance[]> {
-        return this.http.get<Attendance[]>(environment.API_URL + 'Members/' + memberId + '/Attendances');
-    }
+	public getNextPracticeNumber = (): Observable<number> =>
+		this.http.get<number>(environment.API_URL + 'Practices/Next');
 
-    public getAttendanceForPractice(practiceId: number): Observable<Attendance[]> {
-        return this.http.get<Attendance[]>(environment.API_URL + 'Practices/' + practiceId + '/Attendance');
-    }
-//#endregion
+	public addPractice(practice: Practice): Observable<any> {
+		var val = {
+			practiceId: 0,
+			practiceNumber: practice.practiceNumber,
+			practiceDate: practice.practiceDate,
+			practiceTopic: practice.practiceTopic,
+			practiceCost: practice.practiceCost,
+			miscExpense: practice.miscExpense,
+			miscRevenue: practice.miscRevenue
+		};
+		return this.http.post<Practice>(environment.API_URL + 'Practices', val);
+	}
+
+	public updatePractice(practice: Practice): Observable<Practice> {
+		var val = {
+			practiceId: practice.practiceId,
+			practiceNumber: practice.practiceNumber,
+			practiceDate: practice.practiceDate,
+			practiceTopic: practice.practiceTopic,
+			practiceCost: practice.practiceCost,
+			miscExpense: practice.miscExpense,
+			miscRevenue: practice.miscRevenue
+		};
+		return this.http.put<Practice>(environment.API_URL + 'Practices/' + practice.practiceId, val);
+	}
+
+	public deletePractice = (practiceId: number): Observable<any> =>
+		this.http.delete(environment.API_URL + 'Practices/' + practiceId);
+	//#endregion
+
+	//#region Punch card functions
+	public getPunchCardsPurchasedByMember = (memberId: number): Observable<PunchCard[]> =>
+		this.http.get<PunchCard[]>(environment.API_URL + 'PunchCards/Purchased/' + memberId);
+
+	public getPunchCardsHeldByMember = (memberId: number): Observable<PunchCard[]> =>
+		this.http.get<PunchCard[]>(environment.API_URL + 'PunchCards/Held/' + memberId);
+
+	public getAllPunchCardsByMember = (memberId: number): Observable<PunchCard[]> =>
+		this.http.get<PunchCard[]>(environment.API_URL + 'PunchCards/Member/' + memberId)
+
+	public addPunchCard(punchCard: PunchCard): Observable<PunchCard> {
+		var val = {
+			punchCardId: 0,
+			purchaseMemberId: punchCard.purchaseMemberId,
+			currentMemberId: punchCard.purchaseMemberId,
+			purchaseDate: punchCard.purchaseDate,
+			purchaseAmount: punchCard.purchaseAmount
+		};
+		return this.http.post<PunchCard>(environment.API_URL + 'PunchCards', val);
+	}
+
+	public updatePunchCard(punchCard: PunchCard): Observable<PunchCard> {
+		var val = {
+			punchCardId: punchCard.punchCardId,
+			purchaseMemberId: punchCard.purchaseMemberId,
+			currentMemberId: punchCard.currentMemberId,
+			purchaseDate: punchCard.purchaseDate,
+			purchaseAmount: punchCard.purchaseAmount
+		};
+		return this.http.put<PunchCard>(environment.API_URL + 'PunchCards/' + punchCard.punchCardId, val);
+	}
+
+	public deletePunchCard = (punchCardId: number): Observable<any> =>
+		this.http.delete(environment.API_URL + 'PunchCards/' + punchCardId);
+	//#endregion
+
+	//#region Attendance functions
+	public getAttendanceForMember(memberId: number): Observable<Attendance[]> {
+		return this.http.get<Attendance[]>(environment.API_URL + 'Attendances/Member/' + memberId);
+	}
+
+	public getAttendanceForPractice(practiceId: number): Observable<Attendance[]> {
+		return this.http.get<Attendance[]>(environment.API_URL + 'Attendances/Practice/' + practiceId);
+	}
+	//#endregion
+
+	//#region Default functions
+	public getDefaultValue(defaultName: string): Observable<number> {
+		return this.http.get<number>(environment.API_URL + 'Defaults/Value/' + defaultName);
+	}
+	//#endregion
 }

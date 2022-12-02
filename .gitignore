@@ -29,7 +29,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+LindyCircleAngularNetCore/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
@@ -54,8 +54,7 @@ Thumbs.db
 *.sln.docstates
 appsettings.*
 Dockerfile
-DockerPublish.ps1
-DockerPublish.sh
+DockerPublish.*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -82,7 +81,6 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
-.vscode/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 

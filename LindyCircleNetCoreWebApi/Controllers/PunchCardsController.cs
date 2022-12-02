@@ -1,13 +1,12 @@
 ﻿using LindyCircleWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
     [Route("api/PunchCards")]
+    //[Authorize]
     [ApiController]
     public class PunchCardsController : ControllerBase
     {
@@ -19,9 +18,8 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/PunchCards
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCards() {
-            return await _context.PunchCards.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCards() =>
+            await _context.PunchCards.ToListAsync();
 
         // GET: api/PunchCards/5
         [HttpGet("{id}")]
@@ -35,12 +33,25 @@ namespace LindyCircleWebApi.Controllers
             return punchCard;
         }
 
+        // GET: api/PunchCards/Held/5
+        [HttpGet("Held/{id}")]
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsHeldByMember(int id) =>
+            await _context.PunchCards.Where(w => w.CurrentMemberId == id).ToListAsync();
+
+        // GET: api/PunchCards/Purchased/5
+        [HttpGet("Purchased/{id}")]
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsPurchasedByMember(int id) =>
+            await _context.PunchCards.Where(w => w.PurchaseMemberId == id).ToListAsync();
+
+        // GET: api/PunchCards/Member/5
+        [HttpGet("Member/{id}")]
+        public async Task<ActionResult<IEnumerable<PunchCard>>> GetPunchCardsByMember(int id) =>
+            await _context.PunchCards.Where(w => w.PurchaseMemberId == id || w.CurrentMemberId == id).ToListAsync();
+
         // PUT: api/PunchCards/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPunchCard(int id, PunchCard punchCard) {
-            if (id != punchCard.PunchCardId) {
-                return BadRequest();
-            }
+            if (id != punchCard.PunchCardId) return BadRequest();
 
             _context.Entry(punchCard).State = EntityState.Modified;
 
@@ -85,8 +96,6 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool PunchCardExists(int id) {
-            return _context.PunchCards.Any(e => e.PunchCardId == id);
-        }
+        private bool PunchCardExists(int id) => _context.PunchCards.Any(e => e.PunchCardId == id);
     }
 }

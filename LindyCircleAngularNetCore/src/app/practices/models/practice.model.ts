@@ -1,14 +1,14 @@
 export interface Practice {
-    pracitceId: number;
+    practiceId: number;
+    practiceNumber: number;
     practiceDate: Date;
     practiceDateString: string;
-    practiceNumber: number;
+    practiceTopic: string;
+    attendeeCount: number;
     practiceCost: number;
     miscExpense: number;
-    miscRevenue: number;
-    practiceTopic: string;
     attendanceRevenue: number;
-    attendeeCount: number;
+    miscRevenue: number;
     punchCardsSold: number;
     punchCardRevenue: number;
     practiceTotal: number;

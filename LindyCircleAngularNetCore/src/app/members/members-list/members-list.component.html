@@ -1,5 +1,5 @@
-<main class="row justify-content-md-center">
-    <div class="col col-auto">
+<main class="row justify-content-center">
+    <div class="col-auto">
         <button *ngIf="isUserAdmin" type="button" class="btn btn-dark m-2 float-end" (click)="addClick(memberModal)">Add New Member</button>
 
         <div class="table-fix-head table-clear-float">
@@ -7,10 +7,10 @@
                 <thead>
                     <tr>
                         <th style="width: 92px;">
-                            <div style="text-align: right; line-height: 36px; padding-bottom: 8px;">
+                            <div style="text-align: right; line-height: 20px; padding-bottom: 8px; padding-right: 4px;">
                                 Search
                             </div>
-                            <div *ngIf="isUserAdmin" style="text-align: center;">
+                            <div *ngIf="isUserAdmin" style="text-align: center; padding-right: 6px;">
                                 Actions
                             </div>
                             <div *ngIf="!isUserAdmin" style="text-align: center;">
@@ -22,13 +22,13 @@
                         </th>
                         <th>
                             <div class="d-flex flex-row">
-                                <input class="form-control m-2" [(ngModel)]="firstNameFilter" (keyup)="filterMembers()" placeholder="First name" />
+                                <input class="form-control header-search mb-1" [(ngModel)]="firstNameFilter" (keyup)="filterMembers()" placeholder="First name" />
                             </div>
                             <a (click)="sortResult('firstName', 'firstNameSort');">First Name <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                         <th>
                             <div class="d-flex flex-row">
-                                <input class="form-control m-2" [(ngModel)]="lastNameFilter" (keyup)="filterMembers()" placeholder="Last name" />
+                                <input class="form-control header-search mb-1" [(ngModel)]="lastNameFilter" (keyup)="filterMembers()" placeholder="Last name" />
                             </div>
                             <a (click)="sortResult('lastName', 'lastNameSort');">Last Name <i class="bi bi-arrow-down-up"></i></a>
                         </th>
@@ -45,7 +45,7 @@
                             <a (click)="sortResult('totalPaid', 'totalPaidSort');">Total Paid <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                         <th class="text-end">
-                            <a (click)="sortResult('totalAttendance', 'totalAttendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
+                            <a (click)="sortResult('totalAttendance', 'attendanceSort');">Attendance <i class="bi bi-arrow-down-up"></i></a>
                         </th>
                     </tr>
                 </thead>
@@ -91,7 +91,6 @@
             <button type="button" class="btn-close" (click)="closeMemberForm()"></button>
         </div>
         <div class="modal-body">
-            <input class="hidden" formControlName="memberId" />
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="firstName" placeholder="First Name" formControlName="firstName" />
                 <label for="firstName">First Name</label>
@@ -115,7 +114,6 @@
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary" [disabled]="!memberForm.valid">Save</button>
-            <!--<button type="submit" class="btn btn-primary">Save</button>-->
         </div>
     </form>
 </ng-template>

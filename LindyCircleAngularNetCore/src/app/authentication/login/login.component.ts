@@ -5,48 +5,56 @@ import { AuthenticationService } from '@app-shared/services/authentication.servi
 import { environment } from '@env/environment';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.css']
 })
 
 export class LoginComponent implements OnInit {
 
-    constructor(private authService: AuthenticationService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private formBuilder: FormBuilder) { }
+	constructor(private authService: AuthenticationService,
+		private router: Router,
+		private route: ActivatedRoute,
+		private formBuilder: FormBuilder) { }
 
-    returnUrl: string = "/";
+	returnUrl: string = "/";
 
-    loginForm = this.formBuilder.group({
-        userName: ['', Validators.required],
-        password: ['', Validators.required],
-        clientUri: environment.CLIENT_URI + 'emailconfirmation'
-    });
+	loginForm = this.formBuilder.group({
+		userName: ['', Validators.required],
+		password: ['', Validators.required],
+		clientUri: environment.CLIENT_URI + 'emailconfirmation'
+	});
 
-    ngOnInit(): void {
-        this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
-    }
+	ngOnInit(): void {
+		this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+		//For debugging only - delete this region before publishing
+		//#region Debugging login
+		this.loginForm.patchValue({
+			'userName': 'mpipkin',
+			'password': 'Dance5^7*'
+		});
+		this.loginUser();
+		//#endregion
+	}
 
-    validateControl = (controlName: string) => 
-        this.loginForm.controls[controlName].invalid && this.loginForm.controls[controlName].touched;
+	validateControl = (controlName: string) =>
+		this.loginForm.controls[controlName].invalid && this.loginForm.controls[controlName].touched;
 
-    controlHasError = (controlName: string, errorName: string) =>
-        this.loginForm.controls[controlName].hasError(errorName);
+	controlHasError = (controlName: string, errorName: string) =>
+		this.loginForm.controls[controlName].hasError(errorName);
 
-    formHasError = (errorName: string) => this.loginForm.hasError(errorName);
+	formHasError = (errorName: string) => this.loginForm.hasError(errorName);
 
-    loginUser() {
-        this.authService.loginUser(this.loginForm.value).subscribe(
-            res => {
-                localStorage.setItem("token", res.token);
-                localStorage.setItem("roles", res.roles);
-                localStorage.setItem("userName", res.userName);
-                localStorage.setItem("email", res.email);
-                this.authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
-                this.router.navigate([this.returnUrl]);
-            }
-        )
-    }
+	loginUser() {
+		this.authService.loginUser(this.loginForm.value).subscribe(
+			res => {
+				localStorage.setItem("token", res.token);
+				localStorage.setItem("roles", res.roles);
+				localStorage.setItem("userName", res.userName);
+				localStorage.setItem("email", res.email);
+				this.authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
+				this.router.navigate([this.returnUrl]);
+			}
+		)
+	}
 }

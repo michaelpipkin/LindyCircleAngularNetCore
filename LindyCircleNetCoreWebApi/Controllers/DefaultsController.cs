@@ -1,13 +1,12 @@
 ﻿using LindyCircleWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
     [Route("api/Defaults")]
+    [Authorize]
     [ApiController]
     public class DefaultsController : ControllerBase
     {
@@ -19,9 +18,7 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/Defaults
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Default>>> GetDefaults() {
-            return await _context.Defaults.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Default>>> GetDefaults() => await _context.Defaults.ToListAsync();
 
         // GET: api/Defaults/5
         [HttpGet("{id}")]
@@ -33,6 +30,18 @@ namespace LindyCircleWebApi.Controllers
             }
 
             return @default;
+        }
+
+        // GET: api/Defaults/value/Rental%20cost
+        [HttpGet("value/{defaultName}")]
+        public async Task<ActionResult<decimal>> GetDefault(string defaultName) {
+            var @default = await _context.Defaults.SingleOrDefaultAsync(s => s.DefaultName.Equals(defaultName));
+
+            if (@default == null) {
+                return NotFound();
+            }
+
+            return @default.DefaultValue;
         }
 
         // PUT: api/Defaults/5
@@ -84,8 +93,6 @@ namespace LindyCircleWebApi.Controllers
         //    return NoContent();
         //}
 
-        private bool DefaultExists(int id) {
-            return _context.Defaults.Any(e => e.DefaultId == id);
-        }
+        private bool DefaultExists(int id) => _context.Defaults.Any(e => e.DefaultId == id);
     }
 }

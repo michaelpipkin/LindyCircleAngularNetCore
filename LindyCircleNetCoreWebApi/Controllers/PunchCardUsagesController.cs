@@ -1,13 +1,12 @@
 ﻿using LindyCircleWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LindyCircleWebApi.Controllers
 {
     [Route("api/PunchCardUsages")]
+    [Authorize]
     [ApiController]
     public class PunchCardUsagesController : ControllerBase
     {
@@ -19,9 +18,8 @@ namespace LindyCircleWebApi.Controllers
 
         // GET: api/PunchCardUsages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PunchCardUsage>>> GetPunchCardUsages() {
-            return await _context.PunchCardUsages.ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<PunchCardUsage>>> GetPunchCardUsages() =>
+            await _context.PunchCardUsages.ToListAsync();
 
         // GET: api/PunchCardUsages/5
         [HttpGet("{id}")]
@@ -82,8 +80,6 @@ namespace LindyCircleWebApi.Controllers
             return NoContent();
         }
 
-        private bool PunchCardUsageExists(int id) {
-            return _context.PunchCardUsages.Any(e => e.UsageId == id);
-        }
+        private bool PunchCardUsageExists(int id) => _context.PunchCardUsages.Any(e => e.UsageId == id);
     }
 }

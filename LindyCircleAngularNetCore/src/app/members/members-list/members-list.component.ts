@@ -1,12 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
-import { Member } from 'app/members/models/member.model';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
-import { TableSortService } from '@app-shared/services/table-sort.service';
+import { SortingService } from '@app-shared/services/sorting.service';
+import { Member } from 'app/members/models/member.model';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
 @Component({
 	selector: 'app-members-list',
@@ -18,7 +19,7 @@ export class MembersListComponent implements OnInit {
 
 	constructor(private modalService: BsModalService,
 		private repository: RepositoryService,
-		private sorter: TableSortService,
+		private sorter: SortingService,
 		private formBuilder: FormBuilder,
 		private authService: AuthenticationService) { }
 
@@ -44,7 +45,7 @@ export class MembersListComponent implements OnInit {
 	firstNameSort: boolean = true;
 	lastNameSort: boolean = true;
 	totalPaidSort: boolean = true;
-	totalAttendanceSort: boolean = true;
+	attendanceSort: boolean = true;
 
 	deleteId: number = 0;
 
@@ -53,11 +54,36 @@ export class MembersListComponent implements OnInit {
 	}
 
 	getMembers() {
-		this.repository.getMembers().subscribe(data => {
-			this.members = data;
-			this.membersWithoutFilter = data;
-			this.filterMembers();
-		});
+		const modalRef = this.modalService.show(LoadingComponent);
+		this.repository.getMembers().subscribe(
+			res => {
+				this.members = res;
+				this.membersWithoutFilter = res;
+				this.filterMembers();
+				setTimeout(() => { modalRef.hide() }, 500);
+			});
+	}
+
+	filterMembers() {
+		var firstNameFilter = this.firstNameFilter;
+		var lastNameFilter = this.lastNameFilter;
+		var activeFilter = this.activeFilter;
+
+		this.members = this.membersWithoutFilter.filter(
+			function (member: Member) {
+				return member.firstName.toString().toLowerCase().includes(
+					firstNameFilter.toString().trim().toLowerCase()) &&
+					member.lastName.toString().toLowerCase().includes(
+						lastNameFilter.toString().trim().toLowerCase()) &&
+					(member.inactive == false || member.inactive != activeFilter);
+			}
+		);
+	}
+
+	sortResult(col: string, sort: string) {
+		var asc = Reflect.get(this, sort);
+		Reflect.set(this, sort, !asc);
+		this.members = this.sorter.sort(this.members, col, asc);
 	}
 
 	addClick(memberModal: TemplateRef<any>) {
@@ -72,13 +98,13 @@ export class MembersListComponent implements OnInit {
 	}
 
 	editClick(member: Member, memberModal: TemplateRef<any>) {
-		this.modalTitle = "Edit Member";
 		this.memberForm.setValue({
 			'memberId': member.memberId,
 			'firstName': member.firstName,
 			'lastName': member.lastName,
 			'inactive': member.inactive
 		});
+		this.modalTitle = "Edit Member";
 		this.modalRef = this.modalService.show(memberModal);
 	}
 
@@ -125,7 +151,7 @@ export class MembersListComponent implements OnInit {
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);
 		this.modalRef.content.event.subscribe((res: any) => {
 			if (res) this.deleteMember();
-		})
+		});
 	}
 
 	deleteMember() {
@@ -135,26 +161,6 @@ export class MembersListComponent implements OnInit {
 				this.getMembers();
 			}
 		);
-	}
-
-	filterMembers() {
-		var firstNameFilter = this.firstNameFilter;
-		var lastNameFilter = this.lastNameFilter;
-		var activeFilter = this.activeFilter;
-
-		this.members = this.membersWithoutFilter.filter(
-			function (member: Member) {
-				return member.firstName.toString().toLowerCase().includes(
-					firstNameFilter.toString().trim().toLowerCase()) &&
-					member.lastName.toString().toLowerCase().includes(
-						lastNameFilter.toString().trim().toLowerCase()) &&
-					(member.inactive == false || member.inactive != activeFilter);
-			}
-		);
-	}
-
-	sortResult(col: string, sort: string) {
-		this.members = this.sorter.sort(this.members, col, sort);
 	}
 
 	showOkModal(title: string, body: string = "") {

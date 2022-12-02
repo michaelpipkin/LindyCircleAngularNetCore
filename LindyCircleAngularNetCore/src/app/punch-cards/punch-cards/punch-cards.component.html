@@ -1,0 +1,143 @@
+<main>
+	<h2>Punch Cards</h2>
+	<hr />
+	<div class="row">
+		<div class="col-3" style="min-width: 300px;">
+			<form [formGroup]="punchCardForm" (ngSubmit)="onPunchCardFormSubmit()">
+				<div class="form-floating mb-3">
+					<select class="form-control" id="purchaseMemberId" formControlName="purchaseMemberId" (change)="onSelectedMemberChange()">
+						<option *ngFor="let member of members" value={{member.memberId}}>
+							{{member.firstLastName}}
+						</option>
+					</select>
+					<label for="purchaseMemberId">Member</label>
+				</div>
+				<div class="validator-bottom" *ngIf="validateControl('purchaseMemberId') && hasError('purchaseMemberId', 'required')">
+					<em>You must select a member</em>
+				</div>
+				<div class="row">
+					<div class="form-floating mb-3 col-6" style="min-width: 150px;">
+						<input type="date" class="form-control" id="purchaseDate" formControlName="purchaseDate" />
+						<label for="purchaseDate" class="ps-4">Purchase Date</label>
+					</div>
+					<div class="validator-bottom" *ngIf="validateControl('purchaseDate') && hasError('purchaseDate', 'required')">
+						<em>Purchase Date is required</em>
+					</div>
+					<div class="form-floating mb-3 col-6">
+						<input type="number" class="form-control" id="purchaseAmount" formControlName="purchaseAmount" />
+						<label for="purchaseAmount" class="ps-4">Amount</label>
+					</div>
+					<div class="validator-bottom" *ngIf="validateControl('purchaseAmount') && hasError('purchaseAmount', 'required')">
+						<em>Amount is required</em>
+					</div>
+					<div class="validator-bottom" *ngIf="validateControl('purchaseAmount') && hasError('purchaseAmount', 'min')">
+						<em>Amount must be greater than or equal to zero.</em>
+					</div>
+				</div>
+				<div class="text-end">
+					<button type="submit" class="btn btn-primary" [disabled]="!punchCardForm.valid">Purchase Card</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-7 table-fix-head table-clear-float mt-2">
+			<table class="table table-striped table-hover text-nowrap row-sm">
+				<thead>
+					<tr>
+						<th style="width: 62px;">
+							<div style="text-align: center; padding-right: 6px;">
+								Actions
+							</div>
+						</th>
+						<th class="hidden">
+							ID
+						</th>
+						<th style="width: 122px;">
+							Purchase Date
+						</th>
+						<th class="text-end pe-2" style="width: 80px;">
+							Amount
+						</th>
+						<th style="width: 162px;">
+							Remaining Punches
+						</th>
+						<th>
+							Transferred To/From
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let punchCard of punchCards">
+						<td class="actionsColumn">
+							<a *ngIf="punchCard.remainingPunches>0&&punchCard.currentMemberId==selectedMemberId" (click)="onTransferClick(punchCard, transferModal)">
+								<i class="bi bi-arrow-left-right" tooltip="Transfer punch card"></i>
+							</a>
+							<i *ngIf="punchCard.remainingPunches==0||punchCard.currentMemberId!=selectedMemberId" class="bi bi-arrow-left-right fade-icon"></i>
+							<a *ngIf="punchCard.remainingPunches==5" (click)="confirmDelete(punchCard)">
+								<i class="bi bi-trash-fill" tooltip="Delete punch card"></i>
+							</a>
+							<i *ngIf="punchCard.remainingPunches<5" class="bi bi-trash-fill fade-icon"></i>
+						</td>
+						<td>{{punchCard.purchaseDate | date: 'yyyy-LL-dd'}}</td>
+						<td *ngIf="punchCard.purchaseMemberId==selectedMemberId" class="text-end">{{punchCard.purchaseAmount | number: '1.2-2'}}</td>
+						<td *ngIf="punchCard.purchaseMemberId!=selectedMemberId" class="text-end">0.00</td>
+						<td>{{punchCard.remainingPunches}}</td>
+						<td>
+							<div *ngIf="punchCard.currentMemberId!=punchCard.purchaseMemberId">
+								<span *ngIf="punchCard.currentMemberId==selectedMemberId">{{punchCard.purchaseMemberName}}</span>
+								<span *ngIf="punchCard.purchaseMemberId==selectedMemberId">{{punchCard.currentMemberName}}</span>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot *ngIf="punchCards.length>0">
+					<tr>
+						<td colspan="2">
+							Total: {{punchCards.length}}
+						</td>
+						<td class="text-end">
+							{{totalPurchaseAmount | number: '1.2-2'}}
+						</td>
+						<td>
+							{{totalRemainingPunches}}
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</main>
+
+<ng-template #transferModal>
+	<form [formGroup]="transferForm" (ngSubmit)="onTransferFormSubmit()">
+		<div class="modal-header">
+			<h5 class="modal-title">Transfer Punch Card</h5>
+			<button type="button" class="btn-close" (click)="closeTransferForm()"></button>
+		</div>
+		<div class="modal-body">
+			<div class="row">
+				<div class="form-floating mb-3 col-4" style="min-width: 140px;">
+					<input type="text" class="form-control" id="purchaseDate" formControlName="purchaseDate" readonly />
+					<label for="purchaseDate" class="ps-4">Purchase Date</label>
+				</div>
+				<div class="form-floating mb-3 col-5" style="min-width: 155px;">
+					<input type="text" class="form-control" id="remainingPunches" formControlName="remainingPunches" readonly />
+					<label for="remainingPunches" class="ps-4">Remaining Punches</label>
+				</div>
+			</div>
+			<div class="form-floating mb-3">
+				<select class="form-control" id="transferMemberId" formControlName="transferMemberId">
+					<option *ngFor="let member of transferMembers" value={{member.memberId}} (change)="onTransferMemberChange(member.firstLastName)">
+						{{member.firstLastName}}
+					</option>
+				</select>
+				<label for="transferMemberId">Transfer To</label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" [disabled]="!transferForm.valid">Transfer</button>
+		</div>
+	</form>
+</ng-template>
