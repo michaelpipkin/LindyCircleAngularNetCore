@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 			'userName': 'mpipkin',
 			'password': 'Dance5^7*'
 		});
-		this.loginUser();
+		//this.loginUser();
 		//#endregion
 	}
 
@@ -48,10 +48,10 @@ export class LoginComponent implements OnInit {
 	loginUser() {
 		this.authService.loginUser(this.loginForm.value).subscribe(
 			res => {
-				localStorage.setItem("token", res.token);
-				localStorage.setItem("roles", res.roles);
-				localStorage.setItem("userName", res.userName);
-				localStorage.setItem("email", res.email);
+				sessionStorage.setItem("token", res.token);
+				sessionStorage.setItem("roles", res.roles);
+				sessionStorage.setItem("userName", res.userName);
+				sessionStorage.setItem("email", res.email);
 				this.authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
 				this.router.navigate([this.returnUrl]);
 			}

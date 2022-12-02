@@ -58,7 +58,7 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 		JwtModule.forRoot({
 			config: {
 				tokenGetter: () => {
-					return localStorage.getItem("token");
+					return sessionStorage.getItem("token");
 				},
 				allowedDomains: ["localhost:7140"],
 				disallowedRoutes: []

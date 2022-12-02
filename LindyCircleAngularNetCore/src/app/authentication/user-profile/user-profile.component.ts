@@ -21,8 +21,8 @@ export class UserProfileComponent implements OnInit {
         private formBuilder: FormBuilder) { }
 
     ngOnInit(): void {
-        this.userName = localStorage.getItem("userName")!;
-        this.email = localStorage.getItem("email")!;
+        this.userName = sessionStorage.getItem("userName")!;
+        this.email = sessionStorage.getItem("email")!;
     }
 
     changeForm = this.formBuilder.group({

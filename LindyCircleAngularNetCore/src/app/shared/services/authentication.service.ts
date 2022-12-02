@@ -41,17 +41,17 @@ export class AuthenticationService {
 		this.authChangeSub.next(isAuthenticated);
 
     public logout(): void {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         this.sendAuthStateChangeNotification(false);
     }
 
     public isUserAuthenticated(): boolean {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         return token != null && !this.jwtHelper.isTokenExpired(token);
     }
 
     public isUserAdmin(): boolean {
-        const roles = localStorage.getItem("roles");
+        const roles = sessionStorage.getItem("roles");
         return roles != null && roles.includes("Admin");
     }
 
