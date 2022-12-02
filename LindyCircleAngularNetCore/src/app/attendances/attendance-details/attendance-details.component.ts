@@ -27,7 +27,8 @@ export class AttendanceDetailsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private dateFormatService: DateFormatService,
 		private sorter: SortingService,
-		private route: ActivatedRoute) { }
+		private route: ActivatedRoute
+	) { }
 
 	modalRef?: BsModalRef;
 	modalTitle: string = "";
