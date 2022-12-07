@@ -1,0 +1,27 @@
+<div class="row">
+	<div class="col-auto">
+		<form [formGroup]="memberForm" (ngSubmit)="onMemberFormSubmit()">
+			<div class="d-flex flex-row mb-2">
+				<div class="form-floating me-2">
+					<input type="text" class="form-control" id="firstName" placeholder="First Name" formControlName="firstName" />
+					<label for="firstName">First Name</label>
+					<div class="validator-bottom m-0" *ngIf="validateControl('firstName') && hasError('firstName', 'required')">
+						<em>First Name is required</em>
+					</div>
+				</div>
+				<div class="form-floating me-2">
+					<input type="text" class="form-control" id="lastName" placeholder="Last Name" formControlName="lastName" />
+					<label for="lastName">Last Name</label>
+					<div class="validator-bottom m-0" *ngIf="validateControl('lastName') && hasError('lastName', 'required')">
+						<em>Last Name is required</em>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<button type="submit" class="btn btn-primary" [disabled]="!memberForm.valid">Add</button>
+				<button class="btn btn-secondary me-2" routerLink="/members">Cancel</button>
+			</div>
+			<span class="text-danger fw-bold">{{ errorMessage }}</span>
+		</form>
+	</div>
+</div>

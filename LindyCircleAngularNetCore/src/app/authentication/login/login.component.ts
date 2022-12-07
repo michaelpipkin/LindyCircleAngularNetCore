@@ -58,14 +58,14 @@ export class LoginComponent implements OnInit {
 		this.authService.loginUser(this.loginForm.value).subscribe(
 			res => {
 				this.authService.login(res.token, res.email, res.userName, res.roles, true);
-				this.router.navigate([this.returnUrl]);
 			},
 			err => {
-				this.errorMessage = err.detail;
 				this.modalRef.hide();
+				this.errorMessage = err.detail;
 			},
 			() => {
 				this.modalRef.hide();
+				this.router.navigate([this.returnUrl]);
 			}
 		)
 	}

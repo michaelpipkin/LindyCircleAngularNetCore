@@ -113,7 +113,6 @@ export class MembersListComponent implements OnInit {
 	validateControl = (controlName: string) =>
 		this.memberForm.controls[controlName].invalid && this.memberForm.controls[controlName].touched;
 
-
 	hasError = (controlName: string, errorName: string) => this.memberForm.controls[controlName].hasError(errorName);
 
 	onMemberFormSubmit() {

@@ -1,83 +1,88 @@
-<main class="row justify-content-center">
-    <form class="infoForm">
-        <div class="row">
-            <label class="col-2 col-form-label">Name</label>
-            <label class="col col-form-label">{{member?.firstLastName}}</label>
-        </div>
-        <div class="row">
-            <label class="col-2 col-form-label">Status</label>
-            <label class="col col-form-label">{{member?.activeText}}</label>
-        </div>
-        <div class="row">
-            <label class="col-2 col-form-label">Unused punches</label>
-            <label class="col col-form-label">{{member?.remainingPunches}}</label>
-        </div>
-        <div class="row">
-            <label class="col-2 col-form-label">Total paid</label>
-            <label class="col col-form-label">{{member?.totalPaid | number: '1.2-2'}}</label>
-        </div>
-    </form>
-    <div class="row ps-1 mt-3">
-        <div class="col-3 ps-0" style="min-width: 340px;">
-            <div class="table-fix-head" style="width: 320px;">
-                <table class="table table-striped table-hover text-nowrap row-sm">
-                    <caption>Practices</caption>
-                    <thead>
-                        <tr>
-                            <th style="width: 120px;">
-                                Practice Date
-                            </th>
-                            <th>
-                                Pmt Type
-                            </th>
-                            <th class="text-end">
-                                Amount
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let attendance of attendances">
-                            <td>{{attendance.practiceDate | date: 'yyyy-LL-dd'}}</td>
-                            <td>{{attendance.paymentTypeText}}</td>
-                            <td class="text-end">{{attendance.paymentAmount | number: '1.2-2'}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot *ngIf="attendances.length>0">
-                        <tr>
-                            <td>Attended: {{attendances.length}}</td>
-                            <td colspan="2" class="text-end">Total: {{totalAttendanceAmount | number: '1.2-2'}}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-        <div class="col-2 ps-0" style="min-width: 235px;">
-            <div class="table-fix-head" style="width: 215px;">
-                <table class="table table-striped table-hover text-nowrap row-sm">
-                    <caption>Punch Cards</caption>
-                    <thead>
-                        <tr>
-                            <th style="width: 120px;">
-                                Purchase Date
-                            </th>
-                            <th class="text-end">
-                                Amount
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let punchCard of punchCards">
-                            <td>{{punchCard.purchaseDate | date: 'yyyy-LL-dd'}}</td>
-                            <td class="text-end">{{punchCard.purchaseAmount | number: '1.2-2'}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot *ngIf="punchCards.length>0">
-                        <tr>
-                            <td colspan="2" class="text-end">Total: {{totalPurchaseAmount | number: '1.2-2'}}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</main>
+<div class="row">
+	<div class="col-auto">
+		<form class="infoForm">
+			<div class="row">
+				<label class="col-2 col-form-label">Name</label>
+				<label class="col col-form-label">{{member?.firstLastName}}</label>
+			</div>
+			<div class="row">
+				<label class="col-2 col-form-label">Status</label>
+				<label class="col col-form-label">{{member?.activeText}}</label>
+			</div>
+			<div class="row">
+				<label class="col-2 col-form-label">Unused punches</label>
+				<label class="col col-form-label">{{member?.remainingPunches}}</label>
+			</div>
+			<div class="row">
+				<label class="col-2 col-form-label">Total paid</label>
+				<label class="col col-form-label">{{member?.totalPaid | number: '1.2-2'}}</label>
+			</div>
+		</form>
+		<div class="row ps-1 mt-3">
+			<div class="col-3 ps-0" style="min-width: 340px;">
+				<div class="table-fix-head" style="width: 320px;">
+					<table class="table table-striped table-hover text-nowrap row-sm">
+						<caption>Practices</caption>
+						<thead>
+							<tr>
+								<th style="width: 120px;">
+									Practice Date
+								</th>
+								<th>
+									Pmt Type
+								</th>
+								<th class="text-end">
+									Amount
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let attendance of attendances">
+								<td>{{attendance.practiceDate | date: 'yyyy-LL-dd'}}</td>
+								<td>{{attendance.paymentTypeText}}</td>
+								<td class="text-end">{{attendance.paymentAmount | number: '1.2-2'}}</td>
+							</tr>
+						</tbody>
+						<tfoot *ngIf="attendances.length>0">
+							<tr>
+								<td>Attended: {{attendances.length}}</td>
+								<td colspan="2" class="text-end">Total: {{totalAttendanceAmount | number: '1.2-2'}}</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="col-2 ps-0" style="min-width: 235px;">
+				<div class="table-fix-head" style="width: 215px;">
+					<table class="table table-striped table-hover text-nowrap row-sm">
+						<caption>Punch Cards</caption>
+						<thead>
+							<tr>
+								<th style="width: 120px;">
+									Purchase Date
+								</th>
+								<th class="text-end">
+									Amount
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let punchCard of punchCards">
+								<td>{{punchCard.purchaseDate | date: 'yyyy-LL-dd'}}</td>
+								<td class="text-end">{{punchCard.purchaseAmount | number: '1.2-2'}}</td>
+							</tr>
+						</tbody>
+						<tfoot *ngIf="punchCards.length>0">
+							<tr>
+								<td colspan="2" class="text-end">Total: {{totalPurchaseAmount | number: '1.2-2'}}</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<button type="button" class="btn btn-dark" routerLink="/members">Back</button>
+	</div>
+</div>

@@ -25,6 +25,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule, MODAL_CONFIG_DEFAULT_OVERRIDE } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MembersComponent } from './members/members/members.component';
+import { AddMemberComponent } from './members/add-member/add-member.component';
 
 @NgModule({
 	declarations: [
@@ -42,7 +44,9 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 		FooterComponent,
 		LoadingComponent,
 		PunchCardsComponent,
-		AttendanceDetailsComponent
+		AttendanceDetailsComponent,
+  MembersComponent,
+  AddMemberComponent
 	],
 	imports: [
 		BrowserModule,

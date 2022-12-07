@@ -9,6 +9,8 @@ import { MembersListComponent } from 'app/members/members-list/members-list.comp
 import { PracticeDetailsComponent } from 'app/practices/practice-details/practice-details.component';
 import { PracticesListComponent } from 'app/practices/practices-list/practices-list.component';
 import { PunchCardsComponent } from 'app/punch-cards/punch-cards/punch-cards.component';
+import { AddMemberComponent } from './members/add-member/add-member.component';
+import { MembersComponent } from './members/members/members.component';
 import { MembersListResolverService } from './members/services/members-list-resolver.service';
 import { DefaultsResolverService } from './shared/services/defaults-resolver.service';
 
@@ -25,15 +27,28 @@ const routes: Routes = [
 	},
 	{
 		path: 'members',
-		component: MembersListComponent,
+		component: MembersComponent,
 		canActivate: [AuthGuard],
-		data: { title: 'Members' }
-	},
-	{
-		path: 'members/:memberId',
-		component: MemberDetailsComponent,
-		canActivate: [AuthGuard, AdminGuard],
-		data: { title: 'Member Details' }
+		canActivateChild: [AuthGuard],
+		children: [
+			{
+				path: '',
+				component: MembersListComponent,
+				data: { title: 'Members' }
+			},
+			{
+				path: 'add',
+				component: AddMemberComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Add Member' }
+			},
+			{
+				path: ':memberId',
+				component: MemberDetailsComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Member Details' }
+			}
+		]
 	},
 	{
 		path: 'practices',
