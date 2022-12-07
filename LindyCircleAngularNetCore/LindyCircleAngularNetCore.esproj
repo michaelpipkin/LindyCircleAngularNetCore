@@ -11,6 +11,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\app\attendances\services\" />
+    <Folder Include="src\app\members\services\" />
+    <Folder Include="src\app\practices\services\" />
+    <Folder Include="src\app\punch-cards\services\" />
   </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

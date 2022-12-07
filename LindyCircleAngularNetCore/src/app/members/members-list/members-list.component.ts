@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
-import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Member } from 'app/members/models/member.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-members-list',
@@ -16,20 +16,13 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 })
 
 export class MembersListComponent implements OnInit {
-
-	constructor(private modalService: BsModalService,
-		private repository: RepositoryService,
-		private sorter: SortingService,
-		private formBuilder: FormBuilder,
-		private authService: AuthenticationService) { }
-
 	isUserAdmin: boolean = this.authService.isUserAdmin();
 
 	modalRef?: BsModalRef;
-	modalTitle: string = "";
+	modalTitle: string;
 
-	members: Member[] = [];
-	membersWithoutFilter: Member[] = [];
+	members: Member[];
+	membersWithoutFilter: Member[];
 
 	memberForm = this.formBuilder.group({
 		memberId: 0,
@@ -47,20 +40,29 @@ export class MembersListComponent implements OnInit {
 	totalPaidSort: boolean = true;
 	attendanceSort: boolean = true;
 
-	deleteId: number = 0;
+	deleteId: number;
+
+	constructor(private modalService: BsModalService,
+		private repository: RepositoryService,
+		private sorter: SortingService,
+		private formBuilder: FormBuilder,
+		private authService: AuthenticationService) { }
 
 	ngOnInit(): void {
 		this.getMembers();
 	}
 
 	getMembers() {
-		const modalRef = this.modalService.show(LoadingComponent);
+		this.modalRef = this.modalService.show(LoadingComponent)
 		this.repository.getMembers().subscribe(
 			res => {
 				this.members = res;
 				this.membersWithoutFilter = res;
 				this.filterMembers();
-				setTimeout(() => { modalRef.hide() }, 500);
+			},
+			() => { },
+			() => {
+				this.modalRef.hide();
 			});
 	}
 

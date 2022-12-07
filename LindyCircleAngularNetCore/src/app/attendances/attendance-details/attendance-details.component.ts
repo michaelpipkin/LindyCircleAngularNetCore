@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
-import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { DateFormatService } from '@app-shared/services/date-format.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Attendance } from 'app/attendances/models/attendance.model';
-import { Defaults } from 'app/attendances/services/attendance-defaults-resolver.service';
+import { Defaults } from '@app-shared/services/defaults-resolver.service';
 import { Member } from 'app/members/models/member.model';
 import { Practice } from 'app/practices/models/practice.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -86,7 +85,6 @@ export class AttendanceDetailsComponent implements OnInit {
 	}
 
 	onDateChange(): void {
-		const modalRef = this.modalService.show(LoadingComponent);
 		var practiceDate = this.practiceForm.value.practiceDate;
 		this.repository.getPracticeByDate(practiceDate).subscribe(
 			res => {
@@ -111,7 +109,6 @@ export class AttendanceDetailsComponent implements OnInit {
 						'miscRevenue': 0
 					})
 				}
-				setTimeout(() => { modalRef.hide() }, 500);
 			});
 	}
 

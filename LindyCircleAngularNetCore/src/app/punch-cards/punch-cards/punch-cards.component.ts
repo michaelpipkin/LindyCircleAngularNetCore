@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Data } from '@angular/router';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
-import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { DateFormatService } from '@app-shared/services/date-format.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
@@ -9,6 +9,7 @@ import { SortingService } from '@app-shared/services/sorting.service';
 import { Member } from 'app/members/models/member.model';
 import { PunchCard } from 'app/punch-cards/models/punch-card.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-punch-cards',
@@ -22,19 +23,20 @@ export class PunchCardsComponent implements OnInit {
 		private repository: RepositoryService,
 		private sorter: SortingService,
 		private formBuilder: FormBuilder,
-		private dateFormatService: DateFormatService) { }
+		private dateFormatService: DateFormatService,
+		private route: ActivatedRoute) { }
 
 	modalRef?: BsModalRef;
-	modalTitle: string = "";
+	modalTitle: string;
 
-	members: Member[] = [];
-	transferMembers: Member[] = [];
-	selectedMemberId: number = 0;
-	transferMemberName: string = '';
-	punchCards: PunchCard[] = [];
-	totalPurchaseAmount: number = 0;
-	totalRemainingPunches: number = 0;
-	defaultPunchCardCost: number = 0;
+	members: Member[];
+	transferMembers: Member[];
+	selectedMemberId: number;
+	transferMemberName: string;
+	punchCards: PunchCard[];
+	totalPurchaseAmount: number;
+	totalRemainingPunches: number;
+	defaultPunchCardCost: number;
 
 	punchCardForm = this.formBuilder.group({
 		purchaseMemberId: [0, [Validators.required, Validators.min(1)]],
@@ -56,22 +58,28 @@ export class PunchCardsComponent implements OnInit {
 	deleteId: number = 0;
 
 	ngOnInit(): void {
-		this.getDefaultPunchCardCost();
+		this.route.data.subscribe(
+			(data: Data) => {
+				this.defaultPunchCardCost = (data['defaults']).punchCardPrice;
+			}
+		);
+		this.punchCardForm.patchValue({ 'purchaseAmount': this.defaultPunchCardCost.toFixed(2) });
 		this.getMembers();
 	}
 
-	getMembers() {
-		const modalRef = this.modalService.show(LoadingComponent);
+	getMembers(): void {
+		this.modalRef = this.modalService.show(LoadingComponent);
 		this.repository.getMembers().subscribe(
 			res => {
 				this.members = this.sorter.sort(res, 'firstLastName', true);
-				setTimeout(() => { modalRef.hide() }, 500);
-			}
-		);
+			},
+			() => { },
+			() => {
+				this.modalRef.hide();
+			});
 	}
 
 	getPunchCards() {
-		const modalRef = this.modalService.show(LoadingComponent);
 		this.repository.getAllPunchCardsByMember(this.selectedMemberId).subscribe(
 			res => {
 				this.punchCards = res;
@@ -83,16 +91,6 @@ export class PunchCardsComponent implements OnInit {
 					(runningTotal, punchCard) => runningTotal +
 						(punchCard.currentMemberId == this.selectedMemberId ? punchCard.remainingPunches : 0), 0
 				);
-				setTimeout(() => { modalRef.hide() }, 500);
-			}
-		);
-	}
-
-	getDefaultPunchCardCost() {
-		this.repository.getDefaultValue('Punch card price').subscribe(
-			res => {
-				this.defaultPunchCardCost = res;
-				this.punchCardForm.patchValue({ 'purchaseAmount': res.toFixed(2) });
 			}
 		);
 	}

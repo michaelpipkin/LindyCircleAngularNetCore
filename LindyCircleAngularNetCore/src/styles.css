@@ -118,3 +118,7 @@ em {
 .header-search {
 	padding: 0.1rem 0.5rem;
 }
+
+.active {
+	background-color: lightgrey;
+}

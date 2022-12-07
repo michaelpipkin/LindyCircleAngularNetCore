@@ -63,10 +63,12 @@
                                 <!--<a (click)="confirmDelete(member)">
                                     <i class="bi bi-trash-fill" tooltip="Delete member"></i>
                                 </a>-->
-                                <a *ngIf="member.totalAttendance==0&&member.totalPaid==0" (click)="confirmDelete(member)">
+                                <a *ngIf="member.totalAttendance==0&&member.totalPaid==0; else disableDelete" (click)="confirmDelete(member)">
                                     <i class="bi bi-trash-fill" tooltip="Delete member"></i>
                                 </a>
-                                <i *ngIf="member.totalAttendance>0||member.totalPaid>0" class="bi bi-trash-fill fade-icon"></i>
+								<ng-template #disableDelete>
+									<i class="bi bi-trash-fill fade-icon"></i>
+								</ng-template>
                             </div>
                         </td>
                         <td class="hidden">{{member.memberId}}</td>

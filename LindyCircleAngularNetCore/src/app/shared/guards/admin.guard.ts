@@ -15,22 +15,24 @@ export class AdminGuard implements CanActivate {
 
     modalRef?: BsModalRef;
 
-    canActivate() {
-        if (this.authService.isUserAdmin())
-            return true;
-        var forbiddenError = {
-            "name": "Forbidden",
-            "status": "403",
-            "error": {
-                "title": "Forbidden",
-                "detail": "You do not have permission to access that page."
-            }
-        }
-        this.showErrorModal(forbiddenError);
-        return false;
+    canActivate(): boolean {
+		if (this.authService.isUserAdmin()) {
+			return true;
+		} else {
+			var forbiddenError = {
+				"name": "Forbidden",
+				"status": "403",
+				"error": {
+					"title": "Forbidden",
+					"detail": "You do not have permission to access that page."
+				}
+			}
+			this.showErrorModal(forbiddenError);
+			return false;
+		}
     }
 
-    showErrorModal(error: any) {
+    showErrorModal(error: any): void {
         const initialState: ModalOptions = {
             initialState: {
                 error: error

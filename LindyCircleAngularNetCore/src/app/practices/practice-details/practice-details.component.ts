@@ -12,25 +12,24 @@ import { Practice } from 'app/practices/models/practice.model';
 })
 
 export class PracticeDetailsComponent implements OnInit {
+	practice: Practice;
+	attendances: Attendance[];
+	totalAttendanceAmount: number;
 
 	constructor(private http: HttpClient,
 		private route: ActivatedRoute,
 		private repository: RepositoryService) { }
 
-	practice: Practice | undefined;
-	attendances: Attendance[] = [];
-	totalAttendanceAmount: number = 0;
-
 	ngOnInit(): void {
-		const routeParams = this.route.snapshot.paramMap;
-		const practiceIdFromRoute = Number(routeParams.get('practiceId'));
+		// + casts the param as a number
+		const practiceId: number = +this.route.snapshot.params['practiceId'];
 
-		this.repository.getPractice(practiceIdFromRoute).subscribe(
+		this.repository.getPractice(practiceId).subscribe(
 			res => {
 				this.practice = res;
 			});
 
-		this.repository.getAttendanceForPractice(practiceIdFromRoute).subscribe(
+		this.repository.getAttendanceForPractice(practiceId).subscribe(
 			res => {
 				this.attendances = res;
 				this.totalAttendanceAmount = res.reduce(

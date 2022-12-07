@@ -67,12 +67,11 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 	],
 	providers: [
 		Title,
-		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered', backdrop: 'static', keyboard: false } },
+		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered', backdrop: 'static', keyboard: false, animated: false } },
 		{ provide: TooltipConfig, useValue: { container: 'body', placement: 'top', adaptivePosition: false } },
-		{ provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerService, multi: true }
+		{ provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerService, multi: true },
 	],
 	bootstrap: [AppComponent]
 })
-
 
 export class AppModule { }

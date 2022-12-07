@@ -13,27 +13,26 @@ import { PunchCard } from 'app/punch-cards/models/punch-card.model';
 })
 
 export class MemberDetailsComponent implements OnInit {
+	member: Member;
+	attendances: Attendance[];
+	totalAttendanceAmount: number;
+	punchCards: PunchCard[];
+	totalPurchaseAmount: number;
 
 	constructor(private http: HttpClient,
 		private route: ActivatedRoute,
 		private repository: RepositoryService) { }
 
-	member: Member | undefined;
-	attendances: Attendance[] = [];
-	totalAttendanceAmount: number = 0;
-	punchCards: PunchCard[] = [];
-	totalPurchaseAmount: number = 0;
-
 	ngOnInit(): void {
-		const routeParams = this.route.snapshot.paramMap;
-		const memberIdFromRoute = Number(routeParams.get('memberId'));
+		// + casts the param as a number
+		const memberId: number = +this.route.snapshot.params['memberId'];
 
-		this.repository.getMember(memberIdFromRoute).subscribe(
+		this.repository.getMember(memberId).subscribe(
 			res => {
 				this.member = res;
 			});
 
-		this.repository.getAttendanceForMember(memberIdFromRoute).subscribe(
+		this.repository.getAttendanceForMember(memberId).subscribe(
 			res => {
 				this.attendances = res;
 				this.totalAttendanceAmount = res.reduce(
@@ -41,7 +40,7 @@ export class MemberDetailsComponent implements OnInit {
 				);
 			});
 
-		this.repository.getPunchCardsPurchasedByMember(memberIdFromRoute).subscribe(
+		this.repository.getPunchCardsPurchasedByMember(memberId).subscribe(
 			res => {
 				this.punchCards = res;
 				this.totalPurchaseAmount = res.reduce(

@@ -42,22 +42,21 @@ namespace LindyCircleWebApi.Controllers
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var param = new Dictionary<string, string?>
                 {
-                    {"token", token},
+                    { "token", token },
                     { "userName", user.UserName }
                 };
                 var callback = QueryHelpers.AddQueryString(userRegistration.ClientUri, param);
                 var messageBody = $"Click <a href={callback}>here</a> to confirm your account.";
                 var message = new Message(new string[] { user.Email }, "Lindy Circle new user confirmation", messageBody);
                 await _emailSender.SendEmailAsync(message);
-                
+
                 await _userManager.AddToRoleAsync(user, "Member");
 
                 return StatusCode(201);
             }
             else {
                 var errors = result.Errors.Select(e => e.Description);
-                return BadRequest(new RegistrationResponseDto
-                {
+                return BadRequest(new RegistrationResponseDto {
                     IsRegistrationSuccessful = false,
                     Errors = errors,
                     Title = "Registration Error"
@@ -94,9 +93,11 @@ namespace LindyCircleWebApi.Controllers
                 var messageBody = $"Click <a href={callback}>here</a> to confirm your account.";
                 var message = new Message(new string[] { user.Email }, "Lindy Circle new user confirmation", messageBody);
                 await _emailSender.SendEmailAsync(message);
-                return Unauthorized(new AuthResponseDto { Title = "Email not confirmed", 
-                    Detail = "You must confirm your email address before you can login. A new confirmation email has been sent. " + 
-                    "Please click the link the email to confirm your email address." });
+                return Unauthorized(new AuthResponseDto {
+                    Title = "Email not confirmed",
+                    Detail = "You must confirm your email address before you can login. A new confirmation email has been sent. " +
+                    "Please click the link the email to confirm your email address."
+                });
             }
             if (!await _userManager.CheckPasswordAsync(user, userAuthentication.Password))
                 return Unauthorized(new AuthResponseDto { Title = "Unable to authenticate login credentials", Detail = "Invalid username/password combination" });
@@ -106,12 +107,13 @@ namespace LindyCircleWebApi.Controllers
             var tokenOptions = _jwtService.GenerateTokenOptions(signingCredentials, claims);
             var authToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             var roles = await _userManager.GetRolesAsync(user);
-            return Ok(new AuthResponseDto { 
-                IsAuthSuccessful = true, 
+            return Ok(new AuthResponseDto {
+                IsAuthSuccessful = true,
                 Token = authToken,
                 UserName = user.UserName,
                 Email = user.Email,
-                Roles = roles.ToList() });
+                Roles = roles.ToList()
+            });
         }
 
         [HttpPost("ForgotPassword")]

@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { forkJoin, Observable } from 'rxjs';
 
 export interface Defaults {
 	practiceNumber: number;
 	rentalCost: number;
+	punchCardPrice: number;
 }
 
 @Injectable({
 	providedIn: 'root'
 })
-export class AttendanceDefaultsResolverService implements Resolve<Defaults> {
+
+export class DefaultsResolverService implements Resolve<Defaults> {
 	constructor(private repository: RepositoryService) { }
 
-	resolve(): Observable<Defaults> {
+	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Defaults> {
 		return forkJoin({
 			practiceNumber: this.repository.getNextPracticeNumber(),
-			rentalCost: this.repository.getDefaultValue('Rental cost')
+			rentalCost: this.repository.getDefaultValue('Rental cost'),
+			punchCardPrice: this.repository.getDefaultValue('Punch card price')
 		});
-	}	
+	}
 }

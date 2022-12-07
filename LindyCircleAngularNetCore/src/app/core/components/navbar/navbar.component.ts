@@ -11,6 +11,7 @@ import { AuthenticationService } from '@app-shared/services/authentication.servi
 export class NavbarComponent implements OnInit {
 	isUserAuthenticated: boolean = this.authService.isUserAuthenticated();
 	isUserAdmin: boolean = this.authService.isUserAdmin();
+	collapsed: boolean = true;
 
 	constructor(private authService: AuthenticationService,
 		private router: Router) {

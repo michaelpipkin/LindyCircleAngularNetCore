@@ -19,12 +19,13 @@
             </div>
             <div class="row form-group-row">
                 <div class="col-9">
-                    <a [routerLink]="['/account/forgotpassword']">Forgot Password</a>
+                    <a routerLink="/account/forgotpassword">Forgot Password</a>
                 </div>
                 <div class="col-3 text-end">
-                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">{{ buttonText }}</button>
                 </div>
             </div>
+            <span class="text-danger fw-bold">{{ errorMessage }}</span>
         </form>
     </div>
 </div>

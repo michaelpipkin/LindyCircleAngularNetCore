@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { environment } from '@env/environment';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-login',
@@ -11,11 +13,16 @@ import { environment } from '@env/environment';
 })
 
 export class LoginComponent implements OnInit {
+	buttonText: string = "Login";
+	errorMessage: string = "";
+	modalRef?: BsModalRef;
+	modalTitle: string;
 
 	constructor(private authService: AuthenticationService,
 		private router: Router,
 		private route: ActivatedRoute,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: FormBuilder,
+		private modalService: BsModalService) { }
 
 	returnUrl: string = "/";
 
@@ -46,14 +53,19 @@ export class LoginComponent implements OnInit {
 	formHasError = (errorName: string) => this.loginForm.hasError(errorName);
 
 	loginUser() {
+		this.modalTitle = "Working...";
+		this.modalRef = this.modalService.show(LoadingComponent);
 		this.authService.loginUser(this.loginForm.value).subscribe(
 			res => {
-				sessionStorage.setItem("token", res.token);
-				sessionStorage.setItem("roles", res.roles);
-				sessionStorage.setItem("userName", res.userName);
-				sessionStorage.setItem("email", res.email);
-				this.authService.sendAuthStateChangeNotification(res.isAuthSuccessful);
+				this.authService.login(res.token, res.email, res.userName, res.roles, true);
 				this.router.navigate([this.returnUrl]);
+			},
+			err => {
+				this.errorMessage = err.detail;
+				this.modalRef.hide();
+			},
+			() => {
+				this.modalRef.hide();
 			}
 		)
 	}

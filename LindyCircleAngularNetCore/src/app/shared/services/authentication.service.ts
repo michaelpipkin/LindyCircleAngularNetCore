@@ -40,8 +40,17 @@ export class AuthenticationService {
     public sendAuthStateChangeNotification = (isAuthenticated: boolean) =>
 		this.authChangeSub.next(isAuthenticated);
 
+	public login(token: string, email: string, userName: string, roles: string, authSuccessful: boolean): void {
+		sessionStorage.setItem("token", token);
+		sessionStorage.setItem("email", email);
+		sessionStorage.setItem("userName", userName);
+		sessionStorage.setItem("roles", roles);
+		this.sendAuthStateChangeNotification(authSuccessful);
+	}
+
     public logout(): void {
-        sessionStorage.removeItem("token");
+		sessionStorage.removeItem("token");
+		sessionStorage.removeItem("roles");
         this.sendAuthStateChangeNotification(false);
     }
 

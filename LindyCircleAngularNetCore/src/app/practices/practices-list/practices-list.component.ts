@@ -1,12 +1,12 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
-import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Practice } from 'app/practices/models/practice.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-practices-list',
@@ -15,25 +15,17 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 })
 
 export class PracticesListComponent implements OnInit {
-
-	constructor(private modalService: BsModalService,
-		private repository: RepositoryService,
-		private sorter: SortingService,
-		private authService: AuthenticationService) { }
-
 	isUserAdmin: boolean = this.authService.isUserAdmin();
 
 	modalRef?: BsModalRef;
-	modalTitle: string = "";
+	modalTitle: string;
 
 	practices: Practice[] = [];
 	practicesWithoutFilter: Practice[] = [];
-	defaultRentalCost: number = 0;
-	nextPracticeNumber: number = 0;
 
 	practiceTopicFilter: string = "";
-	startDateFilter: Date | undefined;
-	endDateFilter: Date | undefined;
+	startDateFilter: Date;
+	endDateFilter: Date;
 
 	numberSort: boolean = false;
 	dateSort: boolean = false;
@@ -43,20 +35,28 @@ export class PracticesListComponent implements OnInit {
 	miscExpenseSort: boolean = true;
 	miscRevenueSort: boolean = true;
 
-	deleteId: number = 0;
+	deleteId: number;
+
+	constructor(private modalService: BsModalService,
+		private repository: RepositoryService,
+		private sorter: SortingService,
+		private authService: AuthenticationService) { }
 
 	ngOnInit(): void {
 		this.getPractices();
 	}
 
 	getPractices(): void {
-		const modalRef = this.modalService.show(LoadingComponent);
+		this.modalRef = this.modalService.show(LoadingComponent)
 		this.repository.getPractices().subscribe(
 			res => {
 				this.practices = res;
 				this.practicesWithoutFilter = res;
 				this.filterPractices;
-				setTimeout(() => { modalRef.hide() }, 500);
+			},
+			() => { },
+			() => {
+				this.modalRef.hide();
 			});
 	}
 
