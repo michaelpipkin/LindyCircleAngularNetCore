@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Practice } from 'app/practices/models/practice.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-practices-list',
@@ -54,7 +54,9 @@ export class PracticesListComponent implements OnInit {
 				this.practicesWithoutFilter = res;
 				this.filterPractices;
 			},
-			() => { },
+			() => {
+				this.modalRef.hide();
+			},
 			() => {
 				this.modalRef.hide();
 			});

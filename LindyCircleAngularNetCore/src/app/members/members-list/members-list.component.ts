@@ -1,13 +1,12 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { RepositoryService } from '@app-shared/services/repository.service';
 import { SortingService } from '@app-shared/services/sorting.service';
 import { Member } from 'app/members/models/member.model';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-members-list',
@@ -24,13 +23,6 @@ export class MembersListComponent implements OnInit {
 	members: Member[];
 	membersWithoutFilter: Member[];
 
-	memberForm = this.formBuilder.group({
-		memberId: 0,
-		firstName: ['', Validators.required],
-		lastName: ['', Validators.required],
-		inactive: false
-	});
-
 	firstNameFilter: string = "";
 	lastNameFilter: string = "";
 	activeFilter: boolean = true;
@@ -45,28 +37,29 @@ export class MembersListComponent implements OnInit {
 	constructor(private modalService: BsModalService,
 		private repository: RepositoryService,
 		private sorter: SortingService,
-		private formBuilder: FormBuilder,
 		private authService: AuthenticationService) { }
 
 	ngOnInit(): void {
 		this.getMembers();
 	}
 
-	getMembers() {
+	getMembers(): void {
 		this.modalRef = this.modalService.show(LoadingComponent)
 		this.repository.getMembers().subscribe(
-			res => {
+			(res: Member[]) => {
 				this.members = res;
 				this.membersWithoutFilter = res;
 				this.filterMembers();
 			},
-			() => { },
+			() => {
+				this.modalRef.hide();
+			},
 			() => {
 				this.modalRef.hide();
 			});
 	}
 
-	filterMembers() {
+	filterMembers(): void {
 		var firstNameFilter = this.firstNameFilter;
 		var lastNameFilter = this.lastNameFilter;
 		var activeFilter = this.activeFilter;
@@ -82,66 +75,13 @@ export class MembersListComponent implements OnInit {
 		);
 	}
 
-	sortResult(col: string, sort: string) {
+	sortResult(col: string, sort: string): void {
 		var asc = Reflect.get(this, sort);
 		Reflect.set(this, sort, !asc);
 		this.members = this.sorter.sort(this.members, col, asc);
 	}
 
-	addClick(memberModal: TemplateRef<any>) {
-		this.memberForm.setValue({
-			'memberId': 0,
-			'firstName': '',
-			'lastName': '',
-			'inactive': false
-		});
-		this.modalTitle = "Add Member";
-		this.modalRef = this.modalService.show(memberModal);
-	}
-
-	editClick(member: Member, memberModal: TemplateRef<any>) {
-		this.memberForm.setValue({
-			'memberId': member.memberId,
-			'firstName': member.firstName,
-			'lastName': member.lastName,
-			'inactive': member.inactive
-		});
-		this.modalTitle = "Edit Member";
-		this.modalRef = this.modalService.show(memberModal);
-	}
-
-	validateControl = (controlName: string) =>
-		this.memberForm.controls[controlName].invalid && this.memberForm.controls[controlName].touched;
-
-	hasError = (controlName: string, errorName: string) => this.memberForm.controls[controlName].hasError(errorName);
-
-	onMemberFormSubmit() {
-		if (this.memberForm.value.memberId == 0) {
-			this.repository.addMember(this.memberForm.value).subscribe(
-				res => {
-					this.closeMemberForm();
-					this.getMembers();
-					this.showOkModal("Success", `${res.firstLastName} added.`);
-				}
-			);
-		}
-		else {
-			this.repository.updateMember(this.memberForm.value).subscribe(
-				res => {
-					this.closeMemberForm();
-					this.getMembers();
-					this.showOkModal("Success", `${res.firstLastName} updated.`);
-				}
-			);
-		}
-	}
-
-	closeMemberForm() {
-		this.memberForm.reset();
-		this.modalRef?.hide();
-	}
-
-	confirmDelete(member: Member) {
+	confirmDelete(member: Member): void {
 		this.deleteId = member.memberId;
 		const initialState: ModalOptions = {
 			initialState: {
@@ -155,7 +95,7 @@ export class MembersListComponent implements OnInit {
 		});
 	}
 
-	deleteMember() {
+	deleteMember(): void {
 		this.repository.deleteMember(this.deleteId).subscribe(
 			_ => {
 				this.showOkModal("Success", "Member deleted.");
@@ -164,7 +104,7 @@ export class MembersListComponent implements OnInit {
 		);
 	}
 
-	showOkModal(title: string, body: string = "") {
+	showOkModal(title: string, body: string = ""): void {
 		const initialState: ModalOptions = {
 			initialState: {
 				modalTitle: title,

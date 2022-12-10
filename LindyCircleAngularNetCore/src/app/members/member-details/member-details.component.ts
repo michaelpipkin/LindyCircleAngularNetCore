@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RepositoryService } from '@app-shared/services/repository.service';
@@ -19,8 +18,7 @@ export class MemberDetailsComponent implements OnInit {
 	punchCards: PunchCard[];
 	totalPurchaseAmount: number;
 
-	constructor(private http: HttpClient,
-		private route: ActivatedRoute,
+	constructor(private route: ActivatedRoute,
 		private repository: RepositoryService) { }
 
 	ngOnInit(): void {
@@ -28,12 +26,12 @@ export class MemberDetailsComponent implements OnInit {
 		const memberId: number = +this.route.snapshot.params['memberId'];
 
 		this.repository.getMember(memberId).subscribe(
-			res => {
+			(res: Member) => {
 				this.member = res;
 			});
 
 		this.repository.getAttendanceForMember(memberId).subscribe(
-			res => {
+			(res: Attendance[]) => {
 				this.attendances = res;
 				this.totalAttendanceAmount = res.reduce(
 					(runningTotal, attendance) => runningTotal + attendance.paymentAmount, 0
@@ -41,7 +39,7 @@ export class MemberDetailsComponent implements OnInit {
 			});
 
 		this.repository.getPunchCardsPurchasedByMember(memberId).subscribe(
-			res => {
+			(res: PunchCard[]) => {
 				this.punchCards = res;
 				this.totalPurchaseAmount = res.reduce(
 					(runningTotal, punchCard) => runningTotal + punchCard.purchaseAmount, 0

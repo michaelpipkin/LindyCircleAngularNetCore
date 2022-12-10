@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { AuthenticationService } from '@app-shared/services/authentication.service';
 import { environment } from '@env/environment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
 	selector: 'app-login',

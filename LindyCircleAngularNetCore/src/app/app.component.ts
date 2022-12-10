@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 				rt.data.subscribe((data: { title: string; }) => {
 					this.titleService.setTitle(`${this.baseTitle} ${data.title}`)
 				})
-			})
+			});
 	}
 
 	getChild(activatedRoute: ActivatedRoute): any {

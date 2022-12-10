@@ -1,25 +1,41 @@
 <div class="row">
 	<div class="col-auto">
-		<form [formGroup]="memberForm" (ngSubmit)="onMemberFormSubmit()">
+		<form (ngSubmit)="onSubmit()" #newMemberForm="ngForm">
 			<div class="d-flex flex-row mb-2">
 				<div class="form-floating me-2">
-					<input type="text" class="form-control" id="firstName" placeholder="First Name" formControlName="firstName" />
+					<input type="text"
+						   class="form-control"
+						   id="firstName"
+						   name="firstName"
+						   placeholder="First Name"
+						   ngModel
+						   required
+						   #firstName="ngModel"/>
 					<label for="firstName">First Name</label>
-					<div class="validator-bottom m-0" *ngIf="validateControl('firstName') && hasError('firstName', 'required')">
+					<div class="validator-bottom m-0"
+						 *ngIf="firstName.touched && !firstName.valid">
 						<em>First Name is required</em>
 					</div>
 				</div>
 				<div class="form-floating me-2">
-					<input type="text" class="form-control" id="lastName" placeholder="Last Name" formControlName="lastName" />
+					<input type="text"
+						   class="form-control"
+						   id="lastName"
+						   name="lastName"
+						   placeholder="Last Name"
+						   ngModel
+						   required
+						   #lastName="ngModel"/>
 					<label for="lastName">Last Name</label>
-					<div class="validator-bottom m-0" *ngIf="validateControl('lastName') && hasError('lastName', 'required')">
+					<div class="validator-bottom m-0"
+						 *ngIf="lastName.touched && !lastName.valid">
 						<em>Last Name is required</em>
 					</div>
 				</div>
 			</div>
 			<div class="d-flex flex-row-reverse">
-				<button type="submit" class="btn btn-primary" [disabled]="!memberForm.valid">Add</button>
-				<button class="btn btn-secondary me-2" routerLink="/members">Cancel</button>
+				<button type="submit" class="btn btn-primary" [disabled]="!newMemberForm.valid">Add</button>
+				<button type="button" class="btn btn-secondary me-2" routerLink="/members">Cancel</button>
 			</div>
 			<span class="text-danger fw-bold">{{ errorMessage }}</span>
 		</form>

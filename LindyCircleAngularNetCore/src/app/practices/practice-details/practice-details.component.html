@@ -66,7 +66,7 @@
 							<td class="text-end">{{attendance.paymentAmount | number: '1.2-2'}}</td>
 						</tr>
 					</tbody>
-					<tfoot *ngIf="attendances.length>0">
+					<tfoot *ngIf="attendances && attendances.length>0">
 						<tr>
 							<td>Attended: {{attendances.length}}</td>
 							<td colspan="2" class="text-end">Collected: {{totalAttendanceAmount | number: '1.2-2'}}</td>

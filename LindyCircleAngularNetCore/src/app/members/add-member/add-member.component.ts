@@ -1,42 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RepositoryService } from '../../shared/services/repository.service';
+import { LoadingComponent } from '@app-shared/loading/loading.component';
+import { RepositoryService } from '@app-shared/services/repository.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Member } from '../models/member.model';
 
 @Component({
 	selector: 'app-add-member',
 	templateUrl: './add-member.component.html',
 	styleUrls: ['./add-member.component.css']
 })
+
+// This is a template-driven form
 export class AddMemberComponent implements OnInit {
+	@ViewChild('newMemberForm') newMemberForm: NgForm;
 	errorMessage: string = "";
 
-	memberForm = this.formBuilder.group({
-		memberId: 0,
-		firstName: ['', Validators.required],
-		lastName: ['', Validators.required],
-		inactive: false
-	});
+	modalRef?: BsModalRef;
 
-	constructor(private repository: RepositoryService,
-		private formBuilder: FormBuilder,
+	constructor(private modalService: BsModalService,
+		private repository: RepositoryService,
 		private router: Router) { }
 
 	ngOnInit(): void {
 	}
 
-	validateControl = (controlName: string) =>
-		this.memberForm.controls[controlName].invalid && this.memberForm.controls[controlName].touched;
-
-	hasError = (controlName: string, errorName: string) => this.memberForm.controls[controlName].hasError(errorName);
-
-	onMemberFormSubmit() {
-		this.repository.addMember(this.memberForm.value).subscribe(
+	onSubmit() {
+		this.modalRef = this.modalService.show(LoadingComponent);
+		let newMember: Member = <Member>this.newMemberForm.value;
+		newMember.memberId = 0;
+		newMember.inactive = false;
+		this.repository.addMember(newMember).subscribe(
 			() => {
 				this.router.navigate(['members']);
 			},
 			err => {
+				this.modalRef.hide();
 				this.errorMessage = err.detail;
+			},
+			() => {
+				this.modalRef.hide();
 			}
 		);
 	}

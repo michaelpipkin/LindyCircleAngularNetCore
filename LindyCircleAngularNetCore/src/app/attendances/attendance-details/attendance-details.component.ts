@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { DateFormatService } from '@app-shared/services/date-format.service';
@@ -57,11 +57,8 @@ export class AttendanceDetailsComponent implements OnInit {
 	deleteId: number = 0;
 
 	ngOnInit(): void {
-		this.route.data.subscribe(data => {
-			const defaults: Defaults = data['defaults'];
-			this.nextPracticeNumber = defaults.practiceNumber;
-			this.defaultRentalCost = defaults.rentalCost;
-		});
+		this.nextPracticeNumber = this.route.snapshot.data['defaults'].practiceNumber;
+		this.defaultRentalCost = this.route.snapshot.data['defaults'].rentalCost;
 		this.practiceForm.patchValue({
 			'practiceDate': this.dateFormatService.formatDate(new Date()),
 		})
@@ -70,9 +67,9 @@ export class AttendanceDetailsComponent implements OnInit {
 
 	getNextPracticeNumber(): void {
 		this.repository.getNextPracticeNumber().subscribe(
-			res => {
+			(res: number) => {
 				this.nextPracticeNumber = res;
-			},
+			}
 		);
 	}
 

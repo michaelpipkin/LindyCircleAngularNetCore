@@ -27,6 +27,7 @@ import { ModalModule, MODAL_CONFIG_DEFAULT_OVERRIDE } from 'ngx-bootstrap/modal'
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MembersComponent } from './members/members/members.component';
 import { AddMemberComponent } from './members/add-member/add-member.component';
+import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
 
 @NgModule({
 	declarations: [
@@ -45,8 +46,9 @@ import { AddMemberComponent } from './members/add-member/add-member.component';
 		LoadingComponent,
 		PunchCardsComponent,
 		AttendanceDetailsComponent,
-  MembersComponent,
-  AddMemberComponent
+		MembersComponent,
+		AddMemberComponent,
+		PunchCardListComponent
 	],
 	imports: [
 		BrowserModule,
@@ -72,7 +74,7 @@ import { AddMemberComponent } from './members/add-member/add-member.component';
 	providers: [
 		Title,
 		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered', backdrop: 'static', keyboard: false, animated: false } },
-		{ provide: TooltipConfig, useValue: { container: 'body', placement: 'top', adaptivePosition: false } },
+		{ provide: TooltipConfig, useValue: { container: 'main', placement: 'top', adaptivePosition: false } },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerService, multi: true },
 	],
 	bootstrap: [AppComponent]

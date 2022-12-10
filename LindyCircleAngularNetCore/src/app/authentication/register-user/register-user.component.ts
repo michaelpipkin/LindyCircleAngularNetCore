@@ -35,22 +35,24 @@ export class RegisterUserComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    registerUser() {
+	registerUser(): void {
         this.showError = false;
         this.authService.registerUser(this.registerForm.value).subscribe(
-            _ => {
+            () => {
                 this.showOkModal("Success", `User ${this.registerForm.value.userName} registered successfully. Please log in.`);
                 this.router.navigate(['/authentication/login']);
             },
-            error => {
-                this.errorMessage = error;
+            (err: Error) => {
+                this.errorMessage = err.message;
                 this.showError = true;
             }
         );
     }
 
-    validateControl = (controlName: string) =>
-        this.registerForm.controls[controlName].invalid && this.registerForm.controls[controlName].touched;
+	validateControl(controlName: string, errorName: string): boolean {
+		let control = this.registerForm.controls[controlName];
+		return control.touched && control.invalid && control.hasError(errorName);
+	}
 
     validateConfirmPassword(control: AbstractControl): ValidationErrors | null {
         const password = control.get("password")?.value;
@@ -59,12 +61,12 @@ export class RegisterUserComponent implements OnInit {
         return password == confirm ? null : { noMatch: true };
     }
 
-    controlHasError = (controlName: string, errorName: string) =>
-        this.registerForm.controls[controlName].hasError(errorName);
+	formHasError(errorName: string): boolean {
+		return !this.registerForm.controls['confirmPassword'].hasError('required') &&
+			this.registerForm.hasError(errorName);
+	}
 
-    formHasError = (errorName: string) => this.registerForm.hasError(errorName);
-
-    showOkModal(title: string, body: string = "") {
+	showOkModal(title: string, body: string = ""): void {
         const initialState: ModalOptions = {
             initialState: {
                 modalTitle: title,

@@ -12,6 +12,7 @@ import { PunchCardsComponent } from 'app/punch-cards/punch-cards/punch-cards.com
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { MembersComponent } from './members/members/members.component';
 import { MembersListResolverService } from './members/services/members-list-resolver.service';
+import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
 import { DefaultsResolverService } from './shared/services/defaults-resolver.service';
 
 const routes: Routes = [
@@ -66,8 +67,15 @@ const routes: Routes = [
 		path: 'punchcards',
 		component: PunchCardsComponent,
 		canActivate: [AuthGuard, AdminGuard],
-		data: { title: 'Punch Cards' },
-		resolve: { defaults: DefaultsResolverService, members: MembersListResolverService }
+		canActivateChild: [AuthGuard, AdminGuard],
+		children: [
+			{
+				path: '',
+				component: PunchCardListComponent,
+				data: { title: 'Punch Cards' },
+				resolve: { defaults: DefaultsResolverService },
+			}
+		]
 	},
 	{
 		path: 'attendance',
