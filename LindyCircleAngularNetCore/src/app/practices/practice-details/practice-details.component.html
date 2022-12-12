@@ -60,7 +60,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let attendance of attendances">
+						<tr *ngFor="let attendance of attendances" [routerLink]="['/members', attendance.memberId]">
 							<td>{{attendance.memberName}}</td>
 							<td>{{attendance.paymentTypeText}}</td>
 							<td class="text-end">{{attendance.paymentAmount | number: '1.2-2'}}</td>

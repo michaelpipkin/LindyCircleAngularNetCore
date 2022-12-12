@@ -28,6 +28,7 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MembersComponent } from './members/members/members.component';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
+import { EditMemberComponent } from './members/edit-member/edit-member.component';
 
 @NgModule({
 	declarations: [
@@ -48,7 +49,8 @@ import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card
 		AttendanceDetailsComponent,
 		MembersComponent,
 		AddMemberComponent,
-		PunchCardListComponent
+		PunchCardListComponent,
+  EditMemberComponent
 	],
 	imports: [
 		BrowserModule,
@@ -74,7 +76,7 @@ import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card
 	providers: [
 		Title,
 		{ provide: MODAL_CONFIG_DEFAULT_OVERRIDE, useValue: { class: 'modal-dialog-centered', backdrop: 'static', keyboard: false, animated: false } },
-		{ provide: TooltipConfig, useValue: { container: 'main', placement: 'top', adaptivePosition: false } },
+		{ provide: TooltipConfig, useValue: { container: 'body', placement: 'auto', adaptivePosition: true } },
 		{ provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerService, multi: true },
 	],
 	bootstrap: [AppComponent]

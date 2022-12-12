@@ -1,10 +1,10 @@
 <div class="modal-header">
-    <h5 class="modal-title">{{modalTitle}}</h5>
+    <h5 class="modal-title">{{titleText}}</h5>
 </div>
-<div class="modal-body" *ngIf="modalBody!=''">
-    <h6>{{modalBody}}</h6>
+<div class="modal-body" *ngIf="bodyText!=''">
+    <h6>{{bodyText}}</h6>
 </div>
 <div class="modal-footer" id="buttons">
-    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="onConfirm()">Confirm</button>
+    <button type="button" [class]="falseButtonClass" (click)="onCancel()">{{falseButtonText}}</button>
+    <button type="button" [class]="trueButtonClass" (click)="onConfirm()">{{trueButtonText}}</button>
 </div>

@@ -122,3 +122,11 @@ em {
 .active {
 	background-color: lightgrey;
 }
+
+.tooltip {
+	position: absolute;
+}
+
+.tooltip-arrow {
+	position: absolute;
+}

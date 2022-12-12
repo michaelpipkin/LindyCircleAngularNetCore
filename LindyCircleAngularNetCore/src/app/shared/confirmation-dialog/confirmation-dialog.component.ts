@@ -7,8 +7,13 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
     styleUrls: ['./confirmation-dialog.component.css']
 })
 export class ConfirmationDialogComponent {
-    modalTitle?: string;
-    modalBody?: string;
+    titleText: string;
+	bodyText: string;
+	falseButtonText: string = "Cancel";
+	falseButtonClass: string = "btn btn-secondary";
+	trueButtonText: string = "Confirm";
+	trueButtonClass: string = "btn btn-primary";
+
     public event: EventEmitter<any> = new EventEmitter();
 
     constructor(public modalRef: BsModalRef) { }

@@ -10,6 +10,7 @@ import { PracticeDetailsComponent } from 'app/practices/practice-details/practic
 import { PracticesListComponent } from 'app/practices/practices-list/practices-list.component';
 import { PunchCardsComponent } from 'app/punch-cards/punch-cards/punch-cards.component';
 import { AddMemberComponent } from './members/add-member/add-member.component';
+import { EditMemberComponent } from './members/edit-member/edit-member.component';
 import { MembersComponent } from './members/members/members.component';
 import { MembersListResolverService } from './members/services/members-list-resolver.service';
 import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
@@ -42,6 +43,12 @@ const routes: Routes = [
 				component: AddMemberComponent,
 				canActivate: [AdminGuard],
 				data: { title: 'Add Member' }
+			},
+			{
+				path: ':memberId/edit',
+				component: EditMemberComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Edit Member' }
 			},
 			{
 				path: ':memberId',

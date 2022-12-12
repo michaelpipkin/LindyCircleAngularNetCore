@@ -26,7 +26,7 @@ export class AddMemberComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	onSubmit() {
+	onSubmit(): void {
 		this.modalRef = this.modalService.show(LoadingComponent);
 		let newMember: Member = <Member>this.newMemberForm.value;
 		newMember.memberId = 0;
