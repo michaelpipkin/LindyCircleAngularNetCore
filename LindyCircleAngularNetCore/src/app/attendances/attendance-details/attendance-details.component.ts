@@ -113,8 +113,11 @@ export class AttendanceDetailsComponent implements OnInit {
 		this.deleteId = practice.practiceId;
 		const initialState: ModalOptions = {
 			initialState: {
-				modalTitle: "WARNING! This action cannot be undone.",
-				modalBody: `Are you sure you want to delete practice #${practice.practiceNumber} on ${practice.practiceDateString}?`
+				titleText: "WARNING! This action cannot be undone.",
+				bodyText: `Are you sure you want to delete practice #${practice.practiceNumber} on ${practice.practiceDateString}?`,
+				falseButtonText: 'Cancel',
+				trueButtonText: 'Delete',
+				trueButtonClass: 'btn btn-danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

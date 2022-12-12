@@ -156,8 +156,11 @@ export class PunchCardListComponent implements OnInit {
 		this.deleteId = punchCard.punchCardId;
 		const initialState: ModalOptions = {
 			initialState: {
-				modalTitle: "WARNING! This action cannot be undone.",
-				modalBody: "Are you sure you want to delete this punch card?"
+				titleText: "WARNING! This action cannot be undone.",
+				bodyText: "Are you sure you want to delete this punch card?",
+				falseButtonText: 'Cancel',
+				trueButtonText: 'Delete',
+				trueButtonClass: 'btn btn-danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

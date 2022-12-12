@@ -85,8 +85,11 @@ export class MembersListComponent implements OnInit {
 		this.deleteId = member.memberId;
 		const initialState: ModalOptions = {
 			initialState: {
-				modalTitle: "WARNING! This action cannot be undone.",
-				modalBody: `Are you sure you want to delete ${member.firstLastName}?`
+				titleText: "WARNING! This action cannot be undone.",
+				bodyText: `Are you sure you want to delete ${member.firstLastName}?`,
+				falseButtonText: 'Cancel',
+				trueButtonText: 'Delete',
+				trueButtonClass: 'btn btn-danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);
