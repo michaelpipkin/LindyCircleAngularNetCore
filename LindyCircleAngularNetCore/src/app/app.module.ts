@@ -8,7 +8,6 @@ import { ErrorNotificationComponent } from '@app-shared/error-notification/error
 import { LoadingComponent } from '@app-shared/loading/loading.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { ErrorHandlerService } from '@app-shared/services/error-handler.service';
-import { YesnoDialogComponent } from '@app-shared/yesno-dialog/yesno-dialog.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AppComponent } from 'app/app.component';
@@ -37,7 +36,6 @@ import { EditMemberComponent } from './members/edit-member/edit-member.component
 		MembersListComponent,
 		NavbarComponent,
 		ConfirmationDialogComponent,
-		YesnoDialogComponent,
 		MemberDetailsComponent,
 		OkDialogComponent,
 		ErrorNotificationComponent,
