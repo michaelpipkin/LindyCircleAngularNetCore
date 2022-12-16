@@ -23,7 +23,7 @@ export class ErrorHandlerService implements HttpInterceptor {
 				let errorMessage = this.handleError(error);
 				return throwError(errorMessage);
 			})
-		)
+		);
 	}
 
 	private handleError(error: HttpErrorResponse): string {

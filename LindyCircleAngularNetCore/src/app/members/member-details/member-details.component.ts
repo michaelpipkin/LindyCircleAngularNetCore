@@ -61,7 +61,7 @@ export class MemberDetailsComponent implements OnInit {
 				bodyText: `Are you sure you want to delete ${this.member.firstLastName}?`,
 				falseButtonText: 'Cancel',
 				trueButtonText: 'Delete',
-				trueButtonClass: 'btn btn-danger'
+				trueButtonType: 'danger',
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

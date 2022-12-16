@@ -29,9 +29,11 @@
 						</div>
 						<div class="form-floating me-2">
 							<input type="number"
+								   min="0"
 								   class="form-control"
 								   id="purchaseAmount"
-								   formControlName="purchaseAmount" />
+								   formControlName="purchaseAmount"
+								   (blur)="onAmountBlur()"/>
 							<label for="purchaseAmount" class="ps-4">Amount</label>
 							<div class="validator-bottom m-0" *ngIf="validateControl('purchaseAmount', 'required')">
 								<em>Amount is required</em>

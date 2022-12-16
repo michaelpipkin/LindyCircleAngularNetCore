@@ -60,19 +60,19 @@ export class MembersListComponent implements OnInit {
 	}
 
 	filterMembers(): void {
-		var firstNameFilter = this.firstNameFilter;
-		var lastNameFilter = this.lastNameFilter;
-		var activeFilter = this.activeFilter;
+	//	var firstNameFilter = this.firstNameFilter;
+	//	var lastNameFilter = this.lastNameFilter;
+	//	var activeFilter = this.activeFilter;
 
-		this.members = this.membersWithoutFilter.filter(
-			function (member: Member) {
-				return member.firstName.toString().toLowerCase().includes(
-					firstNameFilter.toString().trim().toLowerCase()) &&
-					member.lastName.toString().toLowerCase().includes(
-						lastNameFilter.toString().trim().toLowerCase()) &&
-					(member.inactive == false || member.inactive != activeFilter);
-			}
-		);
+	//	this.members = this.membersWithoutFilter.filter(
+	//		function (member: Member) {
+	//			return member.firstName.toString().toLowerCase().includes(
+	//				firstNameFilter.toString().trim().toLowerCase()) &&
+	//				member.lastName.toString().toLowerCase().includes(
+	//					lastNameFilter.toString().trim().toLowerCase()) &&
+	//				(member.inactive == false || member.inactive != activeFilter);
+	//		}
+	//	);
 	}
 
 	sortResult(col: string, sort: string): void {
@@ -89,7 +89,7 @@ export class MembersListComponent implements OnInit {
 				bodyText: `Are you sure you want to delete ${member.firstLastName}?`,
 				falseButtonText: 'Cancel',
 				trueButtonText: 'Delete',
-				trueButtonClass: 'btn btn-danger'
+				trueButtonType: 'danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

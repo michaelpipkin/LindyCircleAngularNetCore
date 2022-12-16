@@ -29,7 +29,7 @@ export class RepositoryService {
 		this.http.get<Member>(environment.API_URL + 'Members/' + memberId);
 
 	public addMember(member: Member): Observable<Member> {
-		var val = {
+		const val = {
 			memberId: 0,
 			firstName: member.firstName,
 			lastName: member.lastName,
@@ -39,7 +39,7 @@ export class RepositoryService {
 	}
 
 	public updateMember(member: Member): Observable<Member> {
-		var val = {
+		const val = {
 			memberId: member.memberId,
 			firstName: member.firstName,
 			lastName: member.lastName,
@@ -60,8 +60,7 @@ export class RepositoryService {
 		this.http.get<Practice>(environment.API_URL + 'Practices/' + practiceId);
 
 	public getPracticeByDate(practiceDate: Date): Observable<Practice> {
-		var queryParams = new HttpParams();
-		queryParams = queryParams.append("practiceDate", practiceDate.toString());
+		const queryParams = new HttpParams().append("practiceDate", practiceDate.toString());
 		return this.http.get<Practice>(environment.API_URL + 'Practices/Date', { params: queryParams });
 	}
 
@@ -69,7 +68,7 @@ export class RepositoryService {
 		this.http.get<number>(environment.API_URL + 'Practices/Next');
 
 	public addPractice(practice: Practice): Observable<any> {
-		var val = {
+		const val = {
 			practiceId: 0,
 			practiceNumber: practice.practiceNumber,
 			practiceDate: practice.practiceDate,
@@ -82,7 +81,7 @@ export class RepositoryService {
 	}
 
 	public updatePractice(practice: Practice): Observable<Practice> {
-		var val = {
+		const val = {
 			practiceId: practice.practiceId,
 			practiceNumber: practice.practiceNumber,
 			practiceDate: practice.practiceDate,
@@ -109,7 +108,7 @@ export class RepositoryService {
 		this.http.get<PunchCard[]>(environment.API_URL + 'PunchCards/Member/' + memberId)
 
 	public addPunchCard(punchCard: PunchCard): Observable<PunchCard> {
-		var val = {
+		const val = {
 			punchCardId: 0,
 			purchaseMemberId: punchCard.purchaseMemberId,
 			currentMemberId: punchCard.purchaseMemberId,
@@ -120,7 +119,7 @@ export class RepositoryService {
 	}
 
 	public updatePunchCard(punchCard: PunchCard): Observable<PunchCard> {
-		var val = {
+		const val = {
 			punchCardId: punchCard.punchCardId,
 			purchaseMemberId: punchCard.purchaseMemberId,
 			currentMemberId: punchCard.currentMemberId,

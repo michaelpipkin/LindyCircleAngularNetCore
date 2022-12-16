@@ -1,12 +1,12 @@
-<main class="row justify-content-center">
+<div class="row justify-content-center">
 	<div class="col col-auto" style="min-width: 700px;">
 		<div class="row">
 			<div class="form-floating mb-3 col-3">
-				<input type="date" class="form-control" id="startDateFilter" [(ngModel)]="startDateFilter" (blur)="filterPractices()" />
+				<input type="date" class="form-control" id="startDateFilter" [(ngModel)]="startDateFilter" />
 				<label for="startDateFilter" class="ms-2">Starting Date</label>
 			</div>
 			<div class="form-floating mb-3 col-3">
-				<input type="date" class="form-control" id="endDateFilter" [(ngModel)]="endDateFilter" (blur)="filterPractices()" />
+				<input type="date" class="form-control" id="endDateFilter" [(ngModel)]="endDateFilter" />
 				<label for="endDateFilter" class="ms-2">Ending Date</label>
 			</div>
 		</div>
@@ -15,14 +15,6 @@
 			<table class="table table-striped table-hover row-md">
 				<thead>
 					<tr>
-						<th style="width: 62px;">
-							<div *ngIf="isUserAdmin" style="text-align: center; padding-right: 6px;">
-								Actions
-							</div>
-							<div *ngIf="!isUserAdmin" style="text-align: center;">
-								&nbsp;
-							</div>
-						</th>
 						<th class="hidden">
 							ID
 						</th>
@@ -37,7 +29,9 @@
 						</th>
 						<th>
 							<div class="d-flex flex-row">
-								<input class="form-control header-search mb-1" [(ngModel)]="practiceTopicFilter" (keyup)="filterPractices()" placeholder="Topic" />
+								<input class="form-control header-search mb-1"
+									   [(ngModel)]="topicFilter"
+									   placeholder="Topic" />
 							</div>
 							Topic
 						</th>
@@ -59,18 +53,8 @@
 					</tr>
 				</thead>
 				<tbody class="text-nowrap">
-					<tr *ngFor="let practice of practices">
-						<td class="actionsColumn">
-							<div *ngIf="isUserAdmin">
-								<a [routerLink]="['/practices', practice.practiceId]">
-									<i class="bi bi-card-heading" tooltip="Practice details"></i>
-								</a>
-								<a *ngIf="practice.attendeeCount==0" (click)="confirmDelete(practice)">
-									<i class="bi bi-trash-fill" tooltip="Delete practice"></i>
-								</a>
-								<i *ngIf="practice.attendeeCount>0" class="bi bi-trash-fill fade-icon"></i>
-							</div>
-						</td>
+					<tr *ngFor="let practice of practices | practiceListFilter: topicFilter: startDateFilter: endDateFilter"
+						[routerLink]="isUserAdmin ? ['/practices', practice.practiceId] : '/practices'">
 						<td class="hidden">{{practice.practiceId}}</td>
 						<td>{{practice.practiceNumber}}</td>
 						<td>{{practice.practiceDate | date: 'yyyy-LL-dd'}}</td>
@@ -85,4 +69,4 @@
 			</table>
 		</div>
 	</div>
-</main>
+</div>

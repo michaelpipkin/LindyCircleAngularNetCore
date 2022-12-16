@@ -28,6 +28,11 @@ import { MembersComponent } from './members/members/members.component';
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
+import { PracticesComponent } from './practices/practices/practices.component';
+import { AddPracticeComponent } from './practices/add-practice/add-practice.component';
+import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
+import { MemberListFilterPipe } from './members/member-list-filter.pipe';
+import { PracticeListFilterPipe } from './practices/practice-list-filter.pipe';
 
 @NgModule({
 	declarations: [
@@ -48,7 +53,12 @@ import { EditMemberComponent } from './members/edit-member/edit-member.component
 		MembersComponent,
 		AddMemberComponent,
 		PunchCardListComponent,
-  EditMemberComponent
+		EditMemberComponent,
+		PracticesComponent,
+		AddPracticeComponent,
+		EditPracticeComponent,
+		MemberListFilterPipe,
+		PracticeListFilterPipe
 	],
 	imports: [
 		BrowserModule,

@@ -12,7 +12,9 @@ import { PunchCardsComponent } from 'app/punch-cards/punch-cards/punch-cards.com
 import { AddMemberComponent } from './members/add-member/add-member.component';
 import { EditMemberComponent } from './members/edit-member/edit-member.component';
 import { MembersComponent } from './members/members/members.component';
-import { MembersListResolverService } from './members/services/members-list-resolver.service';
+import { AddPracticeComponent } from './practices/add-practice/add-practice.component';
+import { EditPracticeComponent } from './practices/edit-practice/edit-practice.component';
+import { PracticesComponent } from './practices/practices/practices.component';
 import { PunchCardListComponent } from './punch-cards/punch-card-list/punch-card-list.component';
 import { DefaultsResolverService } from './shared/services/defaults-resolver.service';
 
@@ -60,15 +62,34 @@ const routes: Routes = [
 	},
 	{
 		path: 'practices',
-		component: PracticesListComponent,
+		component: PracticesComponent,
 		canActivate: [AuthGuard],
-		data: { title: 'Practices' }
-	},
-	{
-		path: 'practices/:practiceId',
-		component: PracticeDetailsComponent,
-		canActivate: [AuthGuard, AdminGuard],
-		data: { title: 'Practice Details' }
+		canActivateChild: [AuthGuard],
+		children: [
+			{
+				path: '',
+				component: PracticesListComponent,
+				data: { title: 'Practices' }
+			},
+			{
+				path: 'add',
+				component: AddPracticeComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Add Practice' }
+			},
+			{
+				path: ':practiceId/edit',
+				component: EditPracticeComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Edit Practice' }
+			},
+			{
+				path: ':practiceId',
+				component: PracticeDetailsComponent,
+				canActivate: [AdminGuard],
+				data: { title: 'Practice Details' }
+			}
+		]
 	},
 	{
 		path: 'punchcards',

@@ -12,7 +12,6 @@
 							<div class="d-flex flex-row">
 								<input class="form-control header-search mb-1"
 									   [(ngModel)]="firstNameFilter"
-									   (keyup)="filterMembers()"
 									   placeholder="First name" />
 							</div>
 							<a (click)="sortResult('firstName', 'firstNameSort');">First Name <i class="bi bi-arrow-down-up"></i></a>
@@ -21,7 +20,6 @@
 							<div class="d-flex flex-row">
 								<input class="form-control header-search mb-1"
 									   [(ngModel)]="lastNameFilter"
-									   (keyup)="filterMembers()"
 									   placeholder="Last name" />
 							</div>
 							<a (click)="sortResult('lastName', 'lastNameSort');">Last Name <i class="bi bi-arrow-down-up"></i></a>
@@ -30,7 +28,7 @@
 							Inactive
 						</th>
 						<th>
-							Active<input type="checkbox" class="ms-2" [(ngModel)]="activeFilter" (change)="filterMembers()" />
+							Active<input type="checkbox" class="ms-2" [(ngModel)]="activeFilter" />
 						</th>
 						<th class="text-end">
 							Punches
@@ -44,7 +42,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr *ngFor="let member of members" [routerLink]="isUserAdmin ? ['/members', member.memberId] : '/members'">
+					<tr *ngFor="let member of members | memberListFilter: firstNameFilter: lastNameFilter: activeFilter"
+						[routerLink]="isUserAdmin ? ['/members', member.memberId] : '/members'">
 						<td class="hidden">{{member.memberId}}</td>
 						<td>{{member.firstName}}</td>
 						<td>{{member.lastName}}</td>

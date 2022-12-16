@@ -1,17 +1,15 @@
-<div id="memberForm" class="row">
+<div class="row">
 	<div class="col-auto">
 		<form class="infoForm">
 			<div class="row">
 				<label class="col-3 col-form-label">Name</label>
 				<label class="col-4 col-form-label">{{member?.firstLastName}}</label>
 				<div class="col text-end fs-5">
-					<a class="me-2" [routerLink]="['/members', member.memberId, 'edit']"><i class="bi bi-pencil-square" tooltip="Edit member name/active status"></i></a>
-					<i *ngIf="attendances.length > 0 || punchCards.length > 0" class="bi bi-trash-fill fade-icon me-2" tooltip="Can't delete member with attendance or punch card history"></i>
-					<a *ngIf="attendances.length === 0 && punchCards.length === 0" class="me-2" (click)="onDelete()"><i class="bi bi-trash-fill" tooltip="Delete member"></i></a>
+					<a class="me-2" [routerLink]="['/members', member?.memberId, 'edit']"><i class="bi bi-pencil-square" tooltip="Edit member name/active status"></i></a>
+					<i *ngIf="attendances?.length > 0 || punchCards?.length > 0" class="bi bi-trash-fill fade-icon me-2" tooltip="Can't delete member with attendance or punch card history"></i>
+					<a *ngIf="attendances?.length === 0 && punchCards?.length === 0" class="me-2" (click)="onDelete()"><i class="bi bi-trash-fill" tooltip="Delete member"></i></a>
 					<a class="me-3" routerLink="/members"><i class="bi bi-box-arrow-left" tooltip="Back to members list"></i></a>
 				</div>
-				<!--<button type="button" class="col-1 btn btn-dark end p-1 me-1" tooltip="Edit member name/active status">Edit</button>
-				<button type="button" class="col btn btn-danger end p-1" tooltip="Delete member">Delete</button>-->
 			</div>
 			<div class="row">
 				<label class="col-3 col-form-label">Status</label>

@@ -23,7 +23,7 @@ export class PracticesListComponent implements OnInit {
 	practices: Practice[] = [];
 	practicesWithoutFilter: Practice[] = [];
 
-	practiceTopicFilter: string = "";
+	topicFilter: string = "";
 	startDateFilter: Date;
 	endDateFilter: Date;
 
@@ -63,20 +63,20 @@ export class PracticesListComponent implements OnInit {
 	}
 
 	filterPractices(): void {
-		var topicFilter = this.practiceTopicFilter;
-		var startDateFilter = this.startDateFilter;
-		var endDateFilter = this.endDateFilter;
+	//	var topicFilter = this.practiceTopicFilter;
+	//	var startDateFilter = this.startDateFilter;
+	//	var endDateFilter = this.endDateFilter;
 
-		this.practices = this.practicesWithoutFilter.filter(
-			function (practice: Practice) {
-				return practice.practiceTopic.toString().toLowerCase().includes(
-					topicFilter.toString().trim().toLowerCase()) &&
-					(startDateFilter != undefined && startDateFilter.toString() != '' ?
-						practice.practiceDate >= startDateFilter : true) &&
-					(endDateFilter != undefined && endDateFilter.toString() != '' ?
-						practice.practiceDate <= endDateFilter : true)
-			}
-		);
+	//	this.practices = this.practicesWithoutFilter.filter(
+	//		function (practice: Practice) {
+	//			return practice.practiceTopic.toString().toLowerCase().includes(
+	//				topicFilter.toString().trim().toLowerCase()) &&
+	//				(startDateFilter != undefined && startDateFilter.toString() != '' ?
+	//					practice.practiceDate >= startDateFilter : true) &&
+	//				(endDateFilter != undefined && endDateFilter.toString() != '' ?
+	//					practice.practiceDate <= endDateFilter : true)
+	//		}
+	//	);
 	}
 
 	sortResult(col: string, sort: string): void {
@@ -93,7 +93,7 @@ export class PracticesListComponent implements OnInit {
 				bodyText: `Are you sure you want to delete practice #${practice.practiceNumber} on ${practice.practiceDateString}?`,
 				falseButtonText: 'Cancel',
 				trueButtonText: 'Delete',
-				trueButtonClass: 'btn btn-danger'
+				trueButtonType: 'danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

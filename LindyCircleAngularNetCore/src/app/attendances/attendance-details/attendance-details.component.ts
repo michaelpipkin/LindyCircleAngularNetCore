@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ConfirmationDialogComponent } from '@app-shared/confirmation-dialog/confirmation-dialog.component';
 import { OkDialogComponent } from '@app-shared/ok-dialog/ok-dialog.component';
 import { DateFormatService } from '@app-shared/services/date-format.service';
@@ -117,7 +117,7 @@ export class AttendanceDetailsComponent implements OnInit {
 				bodyText: `Are you sure you want to delete practice #${practice.practiceNumber} on ${practice.practiceDateString}?`,
 				falseButtonText: 'Cancel',
 				trueButtonText: 'Delete',
-				trueButtonClass: 'btn btn-danger'
+				trueButtonType: 'danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);

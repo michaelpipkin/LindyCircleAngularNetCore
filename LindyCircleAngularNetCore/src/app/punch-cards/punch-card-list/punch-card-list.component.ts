@@ -107,6 +107,14 @@ export class PunchCardListComponent implements OnInit {
 		);
 	}
 
+	onAmountBlur(): void {
+		if (this.punchCardForm.controls['purchaseAmount'].valid) {
+			this.punchCardForm.patchValue({
+				purchaseAmount: this.punchCardForm.value['purchaseAmount'].toFixed(2)
+			});
+		}
+	}
+
 	onTransferMemberChange(transferMemberName: string): void {
 		this.transferMemberName = transferMemberName;
 	}
@@ -160,7 +168,7 @@ export class PunchCardListComponent implements OnInit {
 				bodyText: "Are you sure you want to delete this punch card?",
 				falseButtonText: 'Cancel',
 				trueButtonText: 'Delete',
-				trueButtonClass: 'btn btn-danger'
+				trueButtonType: 'danger'
 			}
 		};
 		this.modalRef = this.modalService.show(ConfirmationDialogComponent, initialState);
